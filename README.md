@@ -55,7 +55,7 @@ $distance = $hasher->compare('path/to/image1.jpg', 'path/to/image2.jpg');
 Demo
 ----
 
-These images are equal:
+These images are similar:
 
 ![Equals1](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-high.jpg)
 ![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-low.jpg)
@@ -64,7 +64,7 @@ These images are equal:
 	Image 2 hash: 4340922596640824862 (0011110000111110000011100001101000111010001111100001111000011110)
 	Hamming distance: 1
 
-These images are not equal:
+These images are diferent:
 
 ![Equals1](https://github.com/jenssegers/php-imagehash/raw/master/tests/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg)
 ![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/office/tumblr_ndyfq386o41tubinno1_1280.jpg)
