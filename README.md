@@ -5,6 +5,8 @@ ImageHash
 
 > A perceptual hash is a fingerprint of a multimedia file derived from various features from its content. Unlike cryptographic hash functions which rely on the avalanche effect of small changes in input leading to drastic changes in the output, perceptual hashes are "close" to one another if the features are similar.
 
+Perceptual hashes are a different concept compared to cryptographic hash functions like MD5 and SHA1. With cryptographic hashes, the hash values are random. The data used to generate the hash acts like a random seed, so the same data will generate the same result, but different data will create different results. Comparing two SHA1 hash values really only tells you two things. If the hashes are different, then the data is different. And if the hashes are the same, then the data is likely the same. In contrast, perceptual hashes can be compared -- giving you a sense of similarity between the two data sets.
+
 This code was based on:
  - https://github.com/kennethrapp/phasher
  - http://www.phash.org
@@ -28,6 +30,12 @@ Calculating a perceptual hash for an image using the default implementation:
 $hasher = new Jenssegers\ImageHash\ImageHash;
 $hash = $hasher->hash('path/to/image.jpg');
 ```
+
+The hamming distance is used to compare hashes. Low values will indicate that the images are similar or the same, high values indicate that the images are different. Use the following method to detect if images are the same or not:
+
+	$distance = $hasher->distance($hash1, $hash2);
+
+Equal images will not have a distance of 0, so you will need to decided at which distance you will evaluate images. For the images I tested with, a distance between 5 and 10 usually works.
 
 Calculating a perceptual hash for an image using a different implementation:
 

@@ -55,7 +55,7 @@ class ImageHash {
 		$hash1 = $this->implementation->hash($resource1);
 		$hash2 = $this->implementation->hash($resource2);
 
-		return $this->hammingDistance($hash1, $hash2);
+		return $this->distance($hash1, $hash2);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class ImageHash {
 	 * @param int $hash1
 	 * @param int $hash2
 	 */
-	public function hammingDistance($hash1, $hash2)
+	public function distance($hash1, $hash2)
 	{
 		if (is_string($hash1) or is_string($hash2))
 		{

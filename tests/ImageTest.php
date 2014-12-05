@@ -36,7 +36,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 				{
 					if ($target == $image) continue;
 
-					$distance = $imageHash->hammingDistance($hash, $compare);
+					$distance = $imageHash->distance($hash, $compare);
 					$this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) <=> $target ($compare)");
 				}
 			}
@@ -62,7 +62,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 				{
 					if ($target == $image) continue;
 
-					$distance = $imageHash->hammingDistance($hash, $compare);
+					$distance = $imageHash->distance($hash, $compare);
 					$this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) <=> $target ($compare)");
 				}
 			}
