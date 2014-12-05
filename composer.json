@@ -14,6 +14,9 @@
             "name": "Kenneth Rapp"
         }
     ],
+    "require": {
+        "php": ">=5.4.0"
+    },
     "require-dev": {
         "phpunit/phpunit": "~4.4",
         "satooshi/php-coveralls": "~0.6.1"
