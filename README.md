@@ -37,6 +37,13 @@ $hasher = new Jenssegers\ImageHash\ImageHash($implementation);
 $hash = $hasher->hash('path/to/image.jpg');
 ```
 
+Compare 2 images and get their hamming distance:
+
+```php
+$hasher = new Jenssegers\ImageHash\ImageHash;
+$distance = $hasher->compare('path/to/image1.jpg', 'path/to/image2.jpg');
+```
+
 Demo
 ----
 
