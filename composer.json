@@ -1,0 +1,26 @@
+{
+    "name": "jenssegers/imagehash",
+    "description": "Perceptual image hashing for PHP",
+    "type": "library",
+    "keywords": ["imagehash", "perceptual", "hash", "dhash", "ahash", "phash", "image hash"],
+    "homepage": "https://github.com/jenssegers/php-imagehash",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jens Segers",
+            "homepage": "http://jenssegers.be"
+        },
+        {
+            "name": "Kenneth Rapp"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "~4.4",
+        "satooshi/php-coveralls": "~0.6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jenssegers\\ImageHash\\": "src"
+        }
+    }
+}
