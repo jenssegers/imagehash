@@ -24,14 +24,18 @@ Usage
 
 Calculating a perceptual hash for an image using the default implementation:
 
-	$hasher = new Jenssegers\ImageHash\ImageHash;
-	$hash = $hasher->hash('path/to/image.jpg');
+```php
+$hasher = new Jenssegers\ImageHash\ImageHash;
+$hash = $hasher->hash('path/to/image.jpg');
+```
 
 Calculating a perceptual hash for an image using a different implementation:
 
-	$implementation = new Jenssegers\ImageHash\Implementation\DifferenceHash;
-	$hasher = new Jenssegers\ImageHash\ImageHash($implementation);
-	$hash = $hasher->hash('path/to/image.jpg');
+```php
+$implementation = new Jenssegers\ImageHash\Implementation\DifferenceHash;
+$hasher = new Jenssegers\ImageHash\ImageHash($implementation);
+$hash = $hasher->hash('path/to/image.jpg');
+```
 
 Demo
 ----
