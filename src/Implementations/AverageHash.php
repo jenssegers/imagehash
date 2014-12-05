@@ -17,32 +17,27 @@ class AverageHash implements Implementation {
 		imagecopymergegray($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, 50);
 
 		// Get luma value (YCbCr) from RGB colors.
-		$pixels = []; $index = 0;
+		$pixels = [];
 		for ($y = 0; $y < static::SIZE; $y++)
 		{
 			for ($x = 0; $x < static::SIZE; $x++)
 			{
 				$rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-				$pixel = (($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
-				$pixels[] = floor($pixel);
+				$pixels[] = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
 			}
 		}
 
 		// Free up memory.
 		imagedestroy($resized);
 
-		// Get the average pixel values.
+		// Get the average pixel value.
 		$average = floor(array_sum($pixels) / count($pixels));
 
-		// Calculate hash.
+		// Each hash bit is set based on whether the current pixels value is above or below the average.
 		$hash = 0; $one = 1;
 		foreach ($pixels as $pixel)
 		{
-			if ($pixel > $average)
-			{
-				$hash |= $one;
-			}
-
+			if ($pixel > $average) $hash |= $one;
 			$one = $one << 1;
 		}
 

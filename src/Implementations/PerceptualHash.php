@@ -2,7 +2,7 @@
 
 use Jenssegers\ImageHash\Implementation;
 
-class PerceptiveHash implements Implementation {
+class PerceptualHash implements Implementation {
 
 	const SIZE = 32;
 
@@ -23,7 +23,7 @@ class PerceptiveHash implements Implementation {
 			for ($x = 0; $x < static::SIZE; $x++)
 			{
 				$rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-				$row[$x] = (($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
+				$row[$x] = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
 			}
 			$rows[$y] = $this->DCT1D($row);
 		}
@@ -58,11 +58,7 @@ class PerceptiveHash implements Implementation {
 		$hash = 0; $one = 1;
 		foreach ($pixels as $pixel)
 		{
-			if ($pixel > $average)
-			{
-				$hash |= $one;
-			}
-
+			if ($pixel > $average) $hash |= $one;
 			$one = $one << 1;
 		}
 

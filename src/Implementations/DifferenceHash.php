@@ -11,40 +11,40 @@ class DifferenceHash implements Implementation {
 	 */
 	public function hash($resource)
 	{
-		// Resize the image.
-		$resized = imagecreatetruecolor(static::SIZE, static::SIZE);
-		imagecopyresampled($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, imagesx($resource), imagesy($resource));
-		imagecopymergegray($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, 50);
+		// For this implementation we create a 8x9 image.
+		$width = static::SIZE + 1;
+		$heigth = static::SIZE;
 
-		// Get luma value (YCbCr) from RGB colors.
-		$pixels = []; $index = 0;
-		for ($y = 0; $y < static::SIZE; $y++)
+		// Resize the image.
+		$resized = imagecreatetruecolor($width, $heigth);
+		imagecopyresampled($resized, $resource, 0, 0, 0, 0, $width, $heigth, imagesx($resource), imagesy($resource));
+		imagecopymergegray($resized, $resource, 0, 0, 0, 0, $width, $heigth, 50);
+
+		$hash = 0; $one = 1;
+		for ($y = 0; $y < $heigth; $y++)
 		{
-			for ($x = 0; $x < static::SIZE; $x++)
+			// Get the pixel value for the leftmost pixel.
+			$rgb = imagecolorsforindex($resized, imagecolorat($resized, 0, $y));
+			$left = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
+
+			for ($x = 1; $x < $width; $x++)
 			{
+				// Get the pixel value for each pixel starting from position 1.
 				$rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-				$pixel = (($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
-				$pixels[] = floor($pixel);
+				$right = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
+
+				// Each hash bit is set based on whether the left pixel is brighter than the right pixel.
+				// http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
+				if ($left > $right) $hash |= $one;
+
+				// Prepare the next loop.
+				$left = $right;
+				$one = $one << 1;
 			}
 		}
 
 		// Free up memory.
 		imagedestroy($resized);
-
-		// Each bit is simply set based on whether the left pixel is brighter than the right pixel.
-		// http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
-		$hash = 0; $one = 1;
-		foreach ($pixels as $i => $pixel)
-		{
-			$i = isset($pixels[$i + 1]) ? $i : -1;
-
-			if ($pixel > $pixels[$i + 1])
-			{
-				$hash |= $one;
-			}
-
-			$one = $one << 1;
-		}
 
 		return $hash;
 	}

@@ -13,7 +13,8 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 	{
 		$this->hashers = [
 			new AverageHash,
-			new DifferenceHash
+			new DifferenceHash,
+			// new PerceptualHash
 		];
 	}
 
@@ -21,6 +22,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 	{
 		foreach ($this->hashers as $hasher)
 		{
+			$score = 0;
 			$imageHash = new ImageHash($hasher);
 			$images = glob('tests/images/forest/*');
 
@@ -38,8 +40,11 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 
 					$distance = $imageHash->distance($hash, $compare);
 					$this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) <=> $target ($compare)");
+					$score += $distance;
 				}
 			}
+
+			echo get_class($hasher) . " score: $score \n";
 		}
 	}
 
@@ -47,6 +52,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 	{
 		foreach ($this->hashers as $hasher)
 		{
+			$score = 0;
 			$imageHash = new ImageHash($hasher);
 			$images = glob('tests/images/office/*');
 
@@ -64,8 +70,11 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 
 					$distance = $imageHash->distance($hash, $compare);
 					$this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) <=> $target ($compare)");
+					$score += $distance;
 				}
 			}
+
+			echo get_class($hasher) . " score: $score \n";
 		}
 	}
 

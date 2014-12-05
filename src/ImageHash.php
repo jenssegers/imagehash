@@ -3,7 +3,7 @@
 use Exception, UnexpectedValueException;
 use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
-use Jenssegers\ImageHash\Implementations\PerceptiveHash;
+use Jenssegers\ImageHash\Implementations\PerceptualHash;
 
 class ImageHash {
 
