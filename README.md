@@ -39,15 +39,15 @@ These images are equal:
 ![Equals1](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-high.jpg)
 ![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-low.jpg)
 
-	Image 1 hash: 4340922596638727710
-	Image 2 hash: 4340922596640824862
-	Hamming distance: A
+	Image 1 hash: 4340922596638727710 (0011110000111110000011100001101000111010000111100001111000011110)
+	Image 2 hash: 4340922596640824862 (0011110000111110000011100001101000111010001111100001111000011110)
+	Hamming distance: 1
 
 These images are not equal:
 
 ![Equals1](https://github.com/jenssegers/php-imagehash/raw/master/tests/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg)
 ![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/office/tumblr_ndyfq386o41tubinno1_1280.jpg)
 
-	Image 1 hash: 2929776999984224055
-	Image 2 hash: 8138271516244915535
+	Image 1 hash: 2929776999984224055 (0010100010101000101010001010100010101011001010110101011100110111)
+	Image 2 hash: 8138271516244915535 (0111000011110000111100101101001101011011011101010011010101001111)
 	Hamming distance: 32
