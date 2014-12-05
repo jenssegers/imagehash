@@ -69,4 +69,44 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function testCompareEqual()
+	{
+		foreach ($this->hashers as $hasher)
+		{
+			$imageHash = new ImageHash($hasher);
+			$images = glob('tests/images/forest/*');
+
+			foreach ($images as $image)
+			{
+				foreach ($images as $target)
+				{
+					if ($target == $image) continue;
+
+					$distance = $imageHash->compare($image, $target);
+					$this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
+				}
+			}
+		}
+	}
+
+	public function testCompareDifferent()
+	{
+		foreach ($this->hashers as $hasher)
+		{
+			$imageHash = new ImageHash($hasher);
+			$images = glob('tests/images/office/*');
+
+			foreach ($images as $image)
+			{
+				foreach ($images as $target)
+				{
+					if ($target == $image) continue;
+
+					$distance = $imageHash->compare($image, $target);
+					$this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
+				}
+			}
+		}
+	}
+
 }
