@@ -1,9 +1,9 @@
 <?php namespace Jenssegers\ImageHash;
 
 use Exception, UnexpectedValueException;
-use Jenssegers\pHash\Implementations\AverageHash;
-use Jenssegers\pHash\Implementations\DifferenceHash;
-use Jenssegers\pHash\Implementations\PerceptiveHash;
+use Jenssegers\ImageHash\Implementations\AverageHash;
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
+use Jenssegers\ImageHash\Implementations\PerceptiveHash;
 
 class ImageHash {
 
