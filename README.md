@@ -19,7 +19,7 @@ Installation
 
 Install using composer:
 
-	composer require jenssegers/php-imagehash
+	composer require jenssegers/imagehash
 
 Usage
 -----
