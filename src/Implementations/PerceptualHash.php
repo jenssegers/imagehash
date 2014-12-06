@@ -42,22 +42,22 @@ class PerceptualHash implements Implementation {
 
 		// Extract the top 8x8 pixels.
 		$pixels = [];
-		for ($x = 0; $x < 8; $x++)
+		for ($y = 0; $y < 8; $y++)
 		{
-			for ($y = 0; $y < 8; $y++)
+			for ($x = 0; $x < 8; $x++)
 			{
 				$pixels[] = $matrix[$y][$x];
 			}
 		}
 
-		// Get the average pixel values.
-		$average = floor(array_sum($pixels) / count($pixels));
+		// Calculate the median.
+		$median = $this->median($pixels);
 
 		// Calculate hash.
 		$hash = 0; $one = 1;
 		foreach ($pixels as $pixel)
 		{
-			if ($pixel > $average) $hash |= $one;
+			if ($pixel > $median) $hash |= $one;
 			$one = $one << 1;
 		}
 
@@ -65,7 +65,7 @@ class PerceptualHash implements Implementation {
 	}
 
 	/**
-	 * Perform 1 dimension Discrete Cosine Transformation.
+	 * Perform a 1 dimension Discrete Cosine Transformation.
 	 *
 	 * @param  array $pixels
 	 */
@@ -93,6 +93,31 @@ class PerceptualHash implements Implementation {
 		}
 
 		return $transformed;
+	}
+
+	/**
+	 * Get the median of the pixel values.
+	 *
+	 * @param  array  $pixels
+	 * @return double
+	 */
+	protected function median(array $pixels)
+	{
+		sort($pixels, SORT_NUMERIC);
+		$middle = floor(count($pixels) / 2);
+
+		if (count($pixels) % 2)
+		{
+			$median = $pixels[$middle];
+		}
+		else
+		{
+			$low = $pixels[$middle];
+			$high = $pixels[$middle + 1];
+			$median = ($low + $high) / 2;
+		}
+
+		return $median;
 	}
 
 }
