@@ -14,7 +14,6 @@ class PerceptualHash implements Implementation {
 		// Resize the image.
 		$resized = imagecreatetruecolor(static::SIZE, static::SIZE);
 		imagecopyresampled($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, imagesx($resource), imagesy($resource));
-		imagecopymergegray($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, 50);
 
 		// Get luma value (YCbCr) from RGB colors and calculate the DCT for each row.
 		$matrix = []; $row = []; $rows = []; $col = []; $cols = [];

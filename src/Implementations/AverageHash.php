@@ -14,7 +14,6 @@ class AverageHash implements Implementation {
 		// Resize the image.
 		$resized = imagecreatetruecolor(static::SIZE, static::SIZE);
 		imagecopyresampled($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, imagesx($resource), imagesy($resource));
-		imagecopymergegray($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, 50);
 
 		// Get luma value (YCbCr) from RGB colors.
 		$pixels = [];

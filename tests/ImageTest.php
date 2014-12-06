@@ -14,7 +14,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 		$this->hashers = [
 			new AverageHash,
 			new DifferenceHash,
-			// new PerceptualHash
+			new PerceptualHash
 		];
 	}
 

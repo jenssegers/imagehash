@@ -18,7 +18,6 @@ class DifferenceHash implements Implementation {
 		// Resize the image.
 		$resized = imagecreatetruecolor($width, $heigth);
 		imagecopyresampled($resized, $resource, 0, 0, 0, 0, $width, $heigth, imagesx($resource), imagesy($resource));
-		imagecopymergegray($resized, $resource, 0, 0, 0, 0, $width, $heigth, 50);
 
 		$hash = 0; $one = 1;
 		for ($y = 0; $y < $heigth; $y++)
