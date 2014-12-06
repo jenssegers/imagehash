@@ -60,11 +60,11 @@ Demo
 These images are similar:
 
 ![Equals1](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-high.jpg)
-![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-low.jpg)
+![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-copyright.jpg)
 
 	Image 1 hash: 4340922596638727710 (0011110000111110000011100001101000111010000111100001111000011110)
-	Image 2 hash: 4340922596640824862 (0011110000111110000011100001101000111010001111100001111000011110)
-	Hamming distance: 1
+	Image 2 hash: 4340922751324659230 (0011110000111110000011100011111000111110000111100001111000011110)
+	Hamming distance: 3
 
 These images are diferent:
 

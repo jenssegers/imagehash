@@ -30,6 +30,8 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 			foreach ($images as $image)
 			{
 				$hashes[$image] = $hash = $imageHash->hash($image);
+
+				echo "[" . get_class($hasher) . "] $image = $hash \n";
 			}
 
 			foreach ($hashes as $image => $hash)
@@ -39,12 +41,14 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 					if ($target == $image) continue;
 
 					$distance = $imageHash->distance($hash, $compare);
-					$this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) <=> $target ($compare)");
+					$this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
 					$score += $distance;
+
+					echo "[" . get_class($hasher) . "] $image ^ $target = $distance \n";
 				}
 			}
 
-			echo get_class($hasher) . " score: $score \n";
+			echo  "[" . get_class($hasher) . "] Total score: $score \n";
 		}
 	}
 
@@ -60,6 +64,8 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 			foreach ($images as $image)
 			{
 				$hashes[$image] = $hash = $imageHash->hash($image);
+
+				echo "[" . get_class($hasher) . "] $image = $hash \n";
 			}
 
 			foreach ($hashes as $image => $hash)
@@ -69,12 +75,14 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 					if ($target == $image) continue;
 
 					$distance = $imageHash->distance($hash, $compare);
-					$this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) <=> $target ($compare)");
+					$this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
 					$score += $distance;
+
+					echo "[" . get_class($hasher) . "] $image ^ $target = $distance \n";
 				}
 			}
 
-			echo get_class($hasher) . " score: $score \n";
+			echo  "[" . get_class($hasher) . "] Total score: $score \n";
 		}
 	}
 
