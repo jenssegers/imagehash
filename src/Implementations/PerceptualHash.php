@@ -4,7 +4,7 @@ use Jenssegers\ImageHash\Implementation;
 
 class PerceptualHash implements Implementation {
 
-	const SIZE = 32;
+	const SIZE = 64;
 
 	/**
 	 * {@inheritDoc}

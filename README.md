@@ -11,6 +11,8 @@ This code was based on:
  - https://github.com/kennethrapp/phasher
  - http://www.phash.org
  - http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
+ - http://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
+ - http://blog.iconfinder.com/detecting-duplicate-images-using-python
 
 **WARNING**: the PerceptualHash implementation is still under development.
 
