@@ -15,14 +15,14 @@ class AverageHash implements Implementation {
 		$resized = imagecreatetruecolor(static::SIZE, static::SIZE);
 		imagecopyresampled($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, imagesx($resource), imagesy($resource));
 
-		// Get luma value (YCbCr) from RGB colors.
+		// Create an array of greyscale pixel values.
 		$pixels = [];
 		for ($y = 0; $y < static::SIZE; $y++)
 		{
 			for ($x = 0; $x < static::SIZE; $x++)
 			{
 				$rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-				$pixels[] = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
+				$pixels[] = floor(($rgb['red'] + $rgb['green'] + $rgb['blue']) / 3);
 			}
 		}
 

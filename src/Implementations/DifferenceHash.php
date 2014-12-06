@@ -24,13 +24,13 @@ class DifferenceHash implements Implementation {
 		{
 			// Get the pixel value for the leftmost pixel.
 			$rgb = imagecolorsforindex($resized, imagecolorat($resized, 0, $y));
-			$left = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
+			$left = floor(($rgb['red'] + $rgb['green'] + $rgb['blue']) / 3);
 
 			for ($x = 1; $x < $width; $x++)
 			{
 				// Get the pixel value for each pixel starting from position 1.
 				$rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-				$right = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
+				$right = floor(($rgb['red'] + $rgb['green'] + $rgb['blue']) / 3);
 
 				// Each hash bit is set based on whether the left pixel is brighter than the right pixel.
 				// http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
