@@ -66,7 +66,7 @@ class ImageHash {
 	 */
 	public function distance($hash1, $hash2)
 	{
-		if (is_string($hash1) or is_string($hash2))
+		if ( ! is_numeric($hash1) or ! is_numeric($hash2))
 		{
 			throw new UnexpectedValueException;
 		}

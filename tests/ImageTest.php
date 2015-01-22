@@ -126,4 +126,12 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function testThrowsUnexceptedValueException()
+	{
+		$this->setExpectedException('UnexpectedValueException');
+
+		$imageHash = new ImageHash;
+		$imageHash->distance("a", "b");
+	}
+
 }
