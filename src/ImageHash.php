@@ -33,9 +33,20 @@ class ImageHash {
 	 */
 	public function hash($resource)
 	{
-		$resource = is_resource($resource) ? $resource : $this->loadImageResource($resource);
+		$destroy = false;
+
+		if ( ! is_resource($resource))
+		{
+			$resource = $this->loadImageResource($resource);
+			$destroy = true;
+		}
 
 		$hash = $this->implementation->hash($resource);
+
+		if ($destroy)
+		{
+			imagedestroy($resource);
+		}
 
 		return $hash;
 	}
@@ -49,11 +60,8 @@ class ImageHash {
 	 */
 	public function compare($resource1, $resource2)
 	{
-		$resource1 = is_resource($resource1) ? $resource1 : $this->loadImageResource($resource1);
-		$resource2 = is_resource($resource2) ? $resource2 : $this->loadImageResource($resource2);
-
-		$hash1 = $this->implementation->hash($resource1);
-		$hash2 = $this->implementation->hash($resource2);
+		$hash1 = $this->hash($resource1);
+		$hash2 = $this->hash($resource2);
 
 		return $this->distance($hash1, $hash2);
 	}
@@ -99,9 +107,9 @@ class ImageHash {
 	 */
 	protected function loadImageResource($file)
 	{
-		if ( ! file_exists($file))
+		if (is_resource($file))
 		{
-			throw new Exception("File was not found: $file");
+			return $file;
 		}
 
 		try
@@ -110,7 +118,7 @@ class ImageHash {
 		}
 		catch (Exception $e)
 		{
-			throw new Exception("File is not an image: $file");
+			throw new Exception("Unable to load file: $file");
 		}
 	}
 
