@@ -21,7 +21,7 @@ class ImageHash {
 	 */
 	public function __construct(Implementation $implementation = null)
 	{
-		$this->implementation = $implementation ?: new AverageHash;
+		$this->implementation = $implementation ?: new DifferenceHash;
 	}
 
 	/**
