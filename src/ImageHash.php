@@ -86,16 +86,24 @@ class ImageHash {
 		$bin1 = str_pad($bin1, 64, '0', STR_PAD_LEFT);
 		$bin2 = str_pad($bin2, 64, '0', STR_PAD_LEFT);
 
-		// Split into arrays
-		$a1 = str_split($bin1);
-		$a2 = str_split($bin2);
+                if (extension_loaded('gmp')) 
+                {
+                        $gmp1 = gmp_init($bin1, 2);
+                        $gmp2 = gmp_init($bin2, 2);
+                        $dh = gmp_hamdist($gmp1, $gmp2);
+                } 
+                else 
+                {
+                        // Split into arrays
+                        $a1 = str_split($bin1);
+                        $a2 = str_split($bin2);
 
-		$dh = 0;
-		for ($i = 0; $i < count($a1); $i++)
-		{
-			if($a1[$i] != $a2[$i]) $dh++;
-		}
-
+                        $dh = 0;
+                        for ($i = 0; $i < count($a1); $i++)
+                        {
+                                if($a1[$i] != $a2[$i]) $dh++;
+                        }
+                }
 		return $dh;
 	}
 
