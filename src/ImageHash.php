@@ -81,15 +81,8 @@ class ImageHash {
 
 		if (extension_loaded('gmp'))
 		{
-			$bin1 = decbin($hash1);
-			$bin2 = decbin($hash2);
-
-			// Add leading zero's to the binary string.
-			$bin1 = str_pad($bin1, 64, '0', STR_PAD_LEFT);
-			$bin2 = str_pad($bin2, 64, '0', STR_PAD_LEFT);
-
-			$gmp1 = gmp_init($bin1, 2);
-			$gmp2 = gmp_init($bin2, 2);
+			$gmp1 = gmp_init($hash1, 10);
+			$gmp2 = gmp_init($hash2, 10);
 			$dh = gmp_hamdist($gmp1, $gmp2);
 		}
 		else
