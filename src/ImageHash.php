@@ -79,15 +79,15 @@ class ImageHash {
 			throw new UnexpectedValueException;
 		}
 
-		$bin1 = decbin($hash1);
-		$bin2 = decbin($hash2);
-
-		// Add leading zero's to the binary string.
-		$bin1 = str_pad($bin1, 64, '0', STR_PAD_LEFT);
-		$bin2 = str_pad($bin2, 64, '0', STR_PAD_LEFT);
-
 		if (extension_loaded('gmp'))
 		{
+			$bin1 = decbin($hash1);
+			$bin2 = decbin($hash2);
+
+			// Add leading zero's to the binary string.
+			$bin1 = str_pad($bin1, 64, '0', STR_PAD_LEFT);
+			$bin2 = str_pad($bin2, 64, '0', STR_PAD_LEFT);
+
 			$gmp1 = gmp_init($bin1, 2);
 			$gmp2 = gmp_init($bin2, 2);
 			$dh = gmp_hamdist($gmp1, $gmp2);
@@ -95,9 +95,11 @@ class ImageHash {
 		else
 		{
 			$dh = 0;
-			for ($i = 0; $i < strlen($bin1); $i++)
-			{
-				if($bin1[$i] != $bin2[$i]) $dh++;
+			for ($i = 0; $i < 64; $i++) {
+				$k = (1 << $i);
+				if (($hash1 & $k) !== ($hash2 & $k)) {
+					$dh++;
+				}
 			}
 		}
 
