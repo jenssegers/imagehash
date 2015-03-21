@@ -81,8 +81,8 @@ class ImageHash {
 
 		if (extension_loaded('gmp'))
 		{
-			$gmp1 = gmp_init($hash1, 10);
-			$gmp2 = gmp_init($hash2, 10);
+			$gmp1 = gmp_init(sprintf("%u", $hash1), 10);
+			$gmp2 = gmp_init(sprintf("%u", $hash2), 10);
 			$dh = gmp_hamdist($gmp1, $gmp2);
 		}
 		else
