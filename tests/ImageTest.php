@@ -9,6 +9,18 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 
 	protected $precision = 10;
 
+	public static function setUpBeforeClass()
+	{
+		if (extension_loaded('gmp'))
+		{
+			echo "INFO: gmp extension loaded \n";
+		}
+		else
+		{
+			echo "INFO: gmp extension not loaded \n";
+		}
+	}
+
 	public function setUp()
 	{
 		$this->hashers = [
