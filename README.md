@@ -41,7 +41,9 @@ $string = base_convert($hash, 10, 16);
 
 The hamming distance is used to compare hashes. Low values will indicate that the images are similar or the same, high values indicate that the images are different. Use the following method to detect if images are the same or not:
 
-	$distance = $hasher->distance($hash1, $hash2);
+```php
+$distance = $hasher->distance($hash1, $hash2);
+```
 
 Equal images will not have a distance of 0, so you will need to decided at which distance you will evaluate images. For the images I tested with, a distance between 5 and 10 usually works.
 
