@@ -1,7 +1,7 @@
 ImageHash
 =========
 
-[![Latest Stable Version](http://img.shields.io/github/release/jenssegers/php-imagehash.svg)](https://packagist.org/packages/jenssegers/imagehash) [![Build Status](http://img.shields.io/travis/jenssegers/php-imagehash.svg)](https://travis-ci.org/jenssegers/php-imagehash) [![Coverage Status](http://img.shields.io/coveralls/jenssegers/php-imagehash.svg)](https://coveralls.io/r/jenssegers/php-imagehash)
+[![Latest Stable Version](http://img.shields.io/github/release/jenssegers/imagehash.svg)](https://packagist.org/packages/jenssegers/imagehash) [![Build Status](http://img.shields.io/travis/jenssegers/imagehash.svg)](https://travis-ci.org/jenssegers/imagehash) [![Coverage Status](http://img.shields.io/coveralls/jenssegers/imagehash.svg)](https://coveralls.io/r/jenssegers/imagehash)
 
 > A perceptual hash is a fingerprint of a multimedia file derived from various features from its content. Unlike cryptographic hash functions which rely on the avalanche effect of small changes in input leading to drastic changes in the output, perceptual hashes are "close" to one another if the features are similar.
 
@@ -10,7 +10,7 @@ Perceptual hashes are a different concept compared to cryptographic hash functio
 This code was based on:
  - https://github.com/kennethrapp/phasher
  - http://www.phash.org
- - http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
+ - http://www.hackerfactor.com/blog/?/archives/529-Kind-of-Like-That.html
  - http://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
  - http://blog.iconfinder.com/detecting-duplicate-images-using-python
 
@@ -67,8 +67,8 @@ Demo
 
 These images are similar:
 
-![Equals1](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-high.jpg)
-![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/forest/forest-copyright.jpg)
+![Equals1](https://raw.githubusercontent.com/jenssegers/imagehash/master/tests/images/forest/forest-high.jpg)
+![Equals2](https://raw.githubusercontent.com/jenssegers/imagehash/master/tests/images/forest/forest-copyright.jpg)
 
 	Image 1 hash: 4340922596638727710 (0011110000111110000011100001101000111010000111100001111000011110)
 	Image 2 hash: 4340922751324659230 (0011110000111110000011100011111000111110000111100001111000011110)
@@ -76,8 +76,8 @@ These images are similar:
 
 These images are diferent:
 
-![Equals1](https://github.com/jenssegers/php-imagehash/raw/master/tests/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg)
-![Equals2](https://raw.githubusercontent.com/jenssegers/php-imagehash/master/tests/images/office/tumblr_ndyfq386o41tubinno1_1280.jpg)
+![Equals1](https://github.com/jenssegers/imagehash/raw/master/tests/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg)
+![Equals2](https://raw.githubusercontent.com/jenssegers/imagehash/master/tests/images/office/tumblr_ndyfq386o41tubinno1_1280.jpg)
 
 	Image 1 hash: 2929776999984224055 (0010100010101000101010001010100010101011001010110101011100110111)
 	Image 2 hash: 8138271516244915535 (0111000011110000111100101101001101011011011101010011010101001111)
