@@ -50,7 +50,7 @@ Equal images will not have a distance of 0, so you will need to decided at which
 Calculating a perceptual hash for an image using a different implementation:
 
 ```php
-$implementation = new Jenssegers\ImageHash\Implementation\DifferenceHash;
+$implementation = new Jenssegers\ImageHash\Implementations\DifferenceHash;
 $hasher = new Jenssegers\ImageHash\ImageHash($implementation);
 $hash = $hasher->hash('path/to/image.jpg');
 ```
