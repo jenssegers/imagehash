@@ -47,7 +47,7 @@ class ImageHash {
             imagedestroy($resource);
         }
 
-        return $hash;
+        return is_int($hash) ? dechex($hash) : $hash;
     }
 
     /**
@@ -73,17 +73,15 @@ class ImageHash {
      */
     public function distance($hash1, $hash2)
     {
-        if ( ! is_numeric($hash1) or ! is_numeric($hash2))
-        {
-            throw new UnexpectedValueException;
-        }
-
         if (extension_loaded('gmp'))
         {
-            $dh = gmp_hamdist(sprintf("0x%x", $hash1), sprintf("0x%x", $hash2));
+            $dh = gmp_hamdist("0x$hash1", "0x$hash2");
         }
         else
         {
+            $hash1 = hexdec($hash1);
+            $hash2 = hexdec($hash2);
+
             $dh = 0;
             for ($i = 0; $i < 64; $i++) {
                 $k = (1 << $i);
