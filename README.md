@@ -23,6 +23,8 @@ Install using composer:
 
 	composer require jenssegers/imagehash
 
+It is suggested that you also install the [GMP extension](http://php.net/manual/en/book.gmp.php) for PHP. This will result in faster Hamming distance calculations.
+
 Usage
 -----
 
@@ -36,7 +38,8 @@ $hash = $hasher->hash('path/to/image.jpg');
 The resulting hash is a 64 bit integer image fingerprint that can be stored in your database once calculated. If you prefer to store it as a string you could always convert it to a hexadecimal number. Just make sure you convert it back again before you use it to calculate distances.
 
 ```php
-$string = base_convert($hash, 10, 16);
+$hex = dechex($hash);
+$hash = hexdec($hex);
 ```
 
 The hamming distance is used to compare hashes. Low values will indicate that the images are similar or the same, high values indicate that the images are different. Use the following method to detect if images are the same or not:
