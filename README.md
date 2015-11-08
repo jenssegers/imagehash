@@ -1,7 +1,7 @@
 ImageHash
 =========
 
-[![Latest Stable Version](http://img.shields.io/github/release/jenssegers/imagehash.svg)](https://packagist.org/packages/jenssegers/imagehash) [![Build Status](http://img.shields.io/travis/jenssegers/imagehash.svg)](https://travis-ci.org/jenssegers/imagehash) [![Coverage Status](http://img.shields.io/coveralls/jenssegers/imagehash.svg)](https://coveralls.io/r/jenssegers/imagehash)
+[![Latest Stable Version](http://img.shields.io/github/release/jenssegers/imagehash.svg)](https://packagist.org/packages/jenssegers/imagehash) [![Build Status](http://img.shields.io/travis/jenssegers/imagehash.svg)](https://travis-ci.org/jenssegers/imagehash) [![Coverage Status](http://img.shields.io/coveralls/jenssegers/imagehash.svg)](https://coveralls.io/r/jenssegers/imagehash) [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/jenssegers)
 
 > A perceptual hash is a fingerprint of a multimedia file derived from various features from its content. Unlike cryptographic hash functions which rely on the avalanche effect of small changes in input leading to drastic changes in the output, perceptual hashes are "close" to one another if the features are similar.
 
