@@ -1,7 +1,6 @@
 <?php namespace Jenssegers\ImageHash;
 
 use Exception;
-use UnexpectedValueException;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
 class ImageHash {
