@@ -35,20 +35,13 @@ $hasher = new Jenssegers\ImageHash\ImageHash;
 $hash = $hasher->hash('path/to/image.jpg');
 ```
 
-The resulting hash is a 64 bit integer image fingerprint that can be stored in your database once calculated. If you prefer to store it as a string you could always convert it to a hexadecimal number. Just make sure you convert it back again before you use it to calculate distances.
-
-```php
-$hex = dechex($hash);
-$hash = hexdec($hex);
-```
-
-The hamming distance is used to compare hashes. Low values will indicate that the images are similar or the same, high values indicate that the images are different. Use the following method to detect if images are the same or not:
+The resulting hash is a 64 bit hexadecimal image fingerprint that can be stored in your database once calculated. The hamming distance is used to compare two image fingerprints for similarities. Low distance values will indicate that the images are similar or the same, high distance values indicate that the images are different. Use the following method to detect if images are similar or not:
 
 ```php
 $distance = $hasher->distance($hash1, $hash2);
 ```
 
-Equal images will not have a distance of 0, so you will need to decided at which distance you will evaluate images. For the images I tested with, a distance between 5 and 10 usually works.
+Equal images will not always have a distance of 0, so you will need to decide at which distance you will evaluate images as equal. For the image set that I tested, a max distance of 5 was acceptable. But this will depend on the implementation, the images and the number of images. For example; when comparing a small set of images, a lower maximum distances should be acceptable as the chances of false positives are quite low. If however you are comparing a large amount of images, 5 might already be too much.
 
 Calculating a perceptual hash for an image using a different implementation:
 
@@ -73,15 +66,15 @@ These images are similar:
 ![Equals1](https://raw.githubusercontent.com/jenssegers/imagehash/master/tests/images/forest/forest-high.jpg)
 ![Equals2](https://raw.githubusercontent.com/jenssegers/imagehash/master/tests/images/forest/forest-copyright.jpg)
 
-	Image 1 hash: 4340922596638727710 (0011110000111110000011100001101000111010000111100001111000011110)
-	Image 2 hash: 4340922751324659230 (0011110000111110000011100011111000111110000111100001111000011110)
+	Image 1 hash: 3c3e0e1a3a1e1e1e (0011110000111110000011100001101000111010000111100001111000011110)
+	Image 2 hash: 3c3e0e3e3e1e1e1e (0011110000111110000011100011111000111110000111100001111000011110)
 	Hamming distance: 3
 
-These images are diferent:
+These images are different:
 
-![Equals1](https://github.com/jenssegers/imagehash/raw/master/tests/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg)
+![Equals1](https://raw.githubusercontent.com/jenssegers/imagehash/raw/master/tests/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg)
 ![Equals2](https://raw.githubusercontent.com/jenssegers/imagehash/master/tests/images/office/tumblr_ndyfq386o41tubinno1_1280.jpg)
 
-	Image 1 hash: 2929776999984224055 (0010100010101000101010001010100010101011001010110101011100110111)
-	Image 2 hash: 8138271516244915535 (0111000011110000111100101101001101011011011101010011010101001111)
+	Image 1 hash: 69684858535b7575 (0010100010101000101010001010100010101011001010110101011100110111)
+	Image 2 hash: e1e1e2a7bbaf6faf (0111000011110000111100101101001101011011011101010011010101001111)
 	Hamming distance: 32
