@@ -1,13 +1,17 @@
 <?php
 
 use Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\Implementation;
 use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
 
 class ImageTest extends PHPUnit_Framework_TestCase {
 
-    protected $precision = 10;
+    /** @var Implementation[] */
+    private $hashers;
+
+    private $precision = 10;
 
     public static function setUpBeforeClass()
     {
@@ -50,7 +54,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
             {
                 foreach ($hashes as $target => $compare)
                 {
-                    if ($target == $image) continue;
+                    if ($target === $image) continue;
 
                     $distance = $imageHash->distance($hash, $compare);
                     $this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
@@ -84,7 +88,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
             {
                 foreach ($hashes as $target => $compare)
                 {
-                    if ($target == $image) continue;
+                    if ($target === $image) continue;
 
                     $distance = $imageHash->distance($hash, $compare);
                     $this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
@@ -109,7 +113,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
             {
                 foreach ($images as $target)
                 {
-                    if ($target == $image) continue;
+                    if ($target === $image) continue;
 
                     $distance = $imageHash->compare($image, $target);
                     $this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
@@ -129,7 +133,7 @@ class ImageTest extends PHPUnit_Framework_TestCase {
             {
                 foreach ($images as $target)
                 {
-                    if ($target == $image) continue;
+                    if ($target === $image) continue;
 
                     $distance = $imageHash->compare($image, $target);
                     $this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
