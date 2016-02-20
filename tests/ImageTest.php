@@ -5,18 +5,15 @@ use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
 
-class ImageTest extends PHPUnit_Framework_TestCase {
-
+class ImageTest extends PHPUnit_Framework_TestCase
+{
     protected $precision = 10;
 
     public static function setUpBeforeClass()
     {
-        if (extension_loaded('gmp'))
-        {
+        if (extension_loaded('gmp')) {
             echo "INFO: gmp extension loaded \n";
-        }
-        else
-        {
+        } else {
             echo "INFO: gmp extension not loaded \n";
         }
     }
@@ -32,25 +29,23 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 
     public function testEqualHashes()
     {
-        foreach ($this->hashers as $hasher)
-        {
+        foreach ($this->hashers as $hasher) {
             $score = 0;
             $imageHash = new ImageHash($hasher);
             $images = glob('tests/images/forest/*');
 
             $hashes = [];
-            foreach ($images as $image)
-            {
+            foreach ($images as $image) {
                 $hashes[$image] = $hash = $imageHash->hash($image);
 
                 echo "[" . get_class($hasher) . "] $image = $hash \n";
             }
 
-            foreach ($hashes as $image => $hash)
-            {
-                foreach ($hashes as $target => $compare)
-                {
-                    if ($target == $image) continue;
+            foreach ($hashes as $image => $hash) {
+                foreach ($hashes as $target => $compare) {
+                    if ($target == $image) {
+                        continue;
+                    }
 
                     $distance = $imageHash->distance($hash, $compare);
                     $this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
@@ -66,25 +61,23 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 
     public function testDifferentHashes()
     {
-        foreach ($this->hashers as $hasher)
-        {
+        foreach ($this->hashers as $hasher) {
             $score = 0;
             $imageHash = new ImageHash($hasher);
             $images = glob('tests/images/office/*');
 
             $hashes = [];
-            foreach ($images as $image)
-            {
+            foreach ($images as $image) {
                 $hashes[$image] = $hash = $imageHash->hash($image);
 
                 echo "[" . get_class($hasher) . "] $image = $hash \n";
             }
 
-            foreach ($hashes as $image => $hash)
-            {
-                foreach ($hashes as $target => $compare)
-                {
-                    if ($target == $image) continue;
+            foreach ($hashes as $image => $hash) {
+                foreach ($hashes as $target => $compare) {
+                    if ($target == $image) {
+                        continue;
+                    }
 
                     $distance = $imageHash->distance($hash, $compare);
                     $this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
@@ -100,16 +93,15 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 
     public function testCompareEqual()
     {
-        foreach ($this->hashers as $hasher)
-        {
+        foreach ($this->hashers as $hasher) {
             $imageHash = new ImageHash($hasher);
             $images = glob('tests/images/forest/*');
 
-            foreach ($images as $image)
-            {
-                foreach ($images as $target)
-                {
-                    if ($target == $image) continue;
+            foreach ($images as $image) {
+                foreach ($images as $target) {
+                    if ($target == $image) {
+                        continue;
+                    }
 
                     $distance = $imageHash->compare($image, $target);
                     $this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
@@ -120,16 +112,15 @@ class ImageTest extends PHPUnit_Framework_TestCase {
 
     public function testCompareDifferent()
     {
-        foreach ($this->hashers as $hasher)
-        {
+        foreach ($this->hashers as $hasher) {
             $imageHash = new ImageHash($hasher);
             $images = glob('tests/images/office/*');
 
-            foreach ($images as $image)
-            {
-                foreach ($images as $target)
-                {
-                    if ($target == $image) continue;
+            foreach ($images as $image) {
+                foreach ($images as $target) {
+                    if ($target == $image) {
+                        continue;
+                    }
 
                     $distance = $imageHash->compare($image, $target);
                     $this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
@@ -145,5 +136,4 @@ class ImageTest extends PHPUnit_Framework_TestCase {
     //     $imageHash = new ImageHash;
     //     $imageHash->distance("a", "b");
     // }
-
 }

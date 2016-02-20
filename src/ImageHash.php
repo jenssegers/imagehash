@@ -3,8 +3,8 @@
 use Exception;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
-class ImageHash {
-
+class ImageHash
+{
     /**
      * Return hashes as hexacedimals.
      */
@@ -39,27 +39,24 @@ class ImageHash {
      * Calculate a perceptual hash of an image.
      *
      * @param  mixed   $resource
-     * @return integer
+     * @return int
      */
     public function hash($resource)
     {
         $destroy = false;
 
-        if ( ! is_resource($resource))
-        {
+        if (! is_resource($resource)) {
             $resource = $this->loadImageResource($resource);
             $destroy = true;
         }
 
         $hash = $this->implementation->hash($resource);
 
-        if ($destroy)
-        {
+        if ($destroy) {
             imagedestroy($resource);
         }
 
-        if ($this->mode === self::HEXADECIMAL and is_int($hash))
-        {
+        if ($this->mode === self::HEXADECIMAL and is_int($hash)) {
             return dechex($hash);
         }
 
@@ -89,12 +86,9 @@ class ImageHash {
      */
     public function distance($hash1, $hash2)
     {
-        if (extension_loaded('gmp'))
-        {
+        if (extension_loaded('gmp')) {
             $dh = gmp_hamdist("0x$hash1", "0x$hash2");
-        }
-        else
-        {
+        } else {
             $hash1 = hexdec($hash1);
             $hash2 = hexdec($hash2);
 
@@ -118,19 +112,14 @@ class ImageHash {
      */
     protected function loadImageResource($file)
     {
-        if (is_resource($file))
-        {
+        if (is_resource($file)) {
             return $file;
         }
 
-        try
-        {
+        try {
             return imagecreatefromstring(file_get_contents($file));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             throw new Exception("Unable to load file: $file");
         }
     }
-
 }
