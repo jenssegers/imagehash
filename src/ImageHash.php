@@ -6,6 +6,16 @@ use Jenssegers\ImageHash\Implementations\DifferenceHash;
 class ImageHash {
 
     /**
+     * Return hashes as hexacedimals.
+     */
+    const HEXADECIMAL = 'hex';
+
+    /**
+     * Return hashes as decimals.
+     */
+    const DECIMAL = 'dec';
+
+    /**
      * The hashing implementation.
      *
      * @var Implementation
@@ -16,17 +26,19 @@ class ImageHash {
      * Constructor.
      *
      * @param Implementation $implementation
+     * @param string $mode
      */
-    public function __construct(Implementation $implementation = null)
+    public function __construct(Implementation $implementation = null, $mode = self::HEXADECIMAL)
     {
         $this->implementation = $implementation ?: new DifferenceHash;
+
+        $this->mode = $mode;
     }
 
     /**
      * Calculate a perceptual hash of an image.
      *
      * @param  mixed   $resource
-     * @param  integer $size
      * @return integer
      */
     public function hash($resource)
@@ -46,7 +58,12 @@ class ImageHash {
             imagedestroy($resource);
         }
 
-        return is_int($hash) ? dechex($hash) : $hash;
+        if ($this->mode === self::HEXADECIMAL and is_int($hash))
+        {
+            return dechex($hash);
+        }
+
+        return $hash;
     }
 
     /**
