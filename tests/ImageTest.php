@@ -129,6 +129,26 @@ class ImageTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testHexadecimalMode()
+    {
+        $imageHash = new ImageHash(new DifferenceHash(), ImageHash::HEXADECIMAL);
+        $images = glob('tests/images/office/*');
+
+        $hash = $imageHash->hash($images[0]);
+        $this->assertTrue(ctype_xdigit($hash), $hash);
+        $this->assertEquals(0, $imageHash->distance($hash, $hash));
+    }
+
+    public function testDecimalMode()
+    {
+        $imageHash = new ImageHash(new DifferenceHash(), ImageHash::DECIMAL);
+        $images = glob('tests/images/office/*');
+
+        $hash = $imageHash->hash($images[0]);
+        $this->assertTrue(is_int($hash), $hash);
+        $this->assertEquals(0, $imageHash->distance($hash, $hash));
+    }
+
     // public function testThrowsUnexceptedValueException()
     // {
     //     $this->setExpectedException('UnexpectedValueException');

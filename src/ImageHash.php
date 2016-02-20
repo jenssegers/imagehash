@@ -87,10 +87,16 @@ class ImageHash
     public function distance($hash1, $hash2)
     {
         if (extension_loaded('gmp')) {
-            $dh = gmp_hamdist("0x$hash1", "0x$hash2");
+            if ($this->mode === self::HEXADECIMAL) {
+                $dh = gmp_hamdist('0x' . $hash1, '0x' . $hash2);
+            } else {
+                $dh = gmp_hamdist($hash1, $hash2);
+            }
         } else {
-            $hash1 = hexdec($hash1);
-            $hash2 = hexdec($hash2);
+            if ($this->mode === self::HEXADECIMAL) {
+                $hash1 = hexdec($hash1);
+                $hash2 = hexdec($hash2);
+            }
 
             $dh = 0;
             for ($i = 0; $i < 64; $i++) {
