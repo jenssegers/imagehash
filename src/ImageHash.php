@@ -3,7 +3,17 @@
 use Exception;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
-class ImageHash {
+class ImageHash
+{
+    /**
+     * Return hashes as hexacedimals.
+     */
+    const HEXADECIMAL = 'hex';
+
+    /**
+     * Return hashes as decimals.
+     */
+    const DECIMAL = 'dec';
 
     /**
      * The hashing implementation.
@@ -16,32 +26,33 @@ class ImageHash {
      * Constructor.
      *
      * @param Implementation $implementation
+     * @param string $mode
      */
-    public function __construct(Implementation $implementation = null)
+    public function __construct(Implementation $implementation = null, $mode = self::HEXADECIMAL)
     {
         $this->implementation = $implementation ?: new DifferenceHash;
+
+        $this->mode = $mode;
     }
 
     /**
      * Calculate a perceptual hash of an image file.
      *
      * @param  mixed   $resource GD2 resource or filename
-     * @return string
+     * @return int
      */
     public function hash($resource)
     {
         $destroy = false;
 
-        if ( ! is_resource($resource))
-        {
+        if (! is_resource($resource)) {
             $resource = $this->loadImageResource($resource);
             $destroy = true;
         }
 
         $hash = $this->implementation->hash($resource);
 
-        if ($destroy)
-        {
+        if ($destroy) {
             $this->destroyResource($resource);
         }
 
@@ -88,14 +99,17 @@ class ImageHash {
      */
     public function distance($hash1, $hash2)
     {
-        if (extension_loaded('gmp'))
-        {
-            $dh = gmp_hamdist("0x$hash1", "0x$hash2");
-        }
-        else
-        {
-            $hash1 = hexdec($hash1);
-            $hash2 = hexdec($hash2);
+        if (extension_loaded('gmp')) {
+            if ($this->mode === self::HEXADECIMAL) {
+                $dh = gmp_hamdist('0x' . $hash1, '0x' . $hash2);
+            } else {
+                $dh = gmp_hamdist($hash1, $hash2);
+            }
+        } else {
+            if ($this->mode === self::HEXADECIMAL) {
+                $hash1 = hexdec($hash1);
+                $hash2 = hexdec($hash2);
+            }
 
             $dh = 0;
             for ($i = 0; $i < 64; $i++) {
@@ -117,8 +131,7 @@ class ImageHash {
      */
     protected function loadImageResource($file)
     {
-        if (is_resource($file))
-        {
+        if (is_resource($file)) {
             return $file;
         }
 
@@ -167,6 +180,6 @@ class ImageHash {
      */
     protected function formatHash($hash)
     {
-        return is_int($hash) ? dechex($hash) : $hash;
+        return $this->mode === static::HEXADECIMAL ? dechex($hash) : $hash;
     }
 }

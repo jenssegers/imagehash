@@ -33,7 +33,9 @@ Usage
 Calculating a perceptual hash for an image using the default implementation:
 
 ```php
-$hasher = new Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\ImageHash;
+
+$hasher = new ImageHash;
 $hash = $hasher->hash('path/to/image.jpg');
 ```
 
@@ -48,16 +50,24 @@ Equal images will not always have a distance of 0, so you will need to decide at
 Calculating a perceptual hash for an image using a different implementation:
 
 ```php
-$implementation = new Jenssegers\ImageHash\Implementations\DifferenceHash;
-$hasher = new Jenssegers\ImageHash\ImageHash($implementation);
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
+use Jenssegers\ImageHash\ImageHash;
+
+$implementation = new DifferenceHash;
+$hasher = new ImageHash($implementation);
 $hash = $hasher->hash('path/to/image.jpg');
 ```
 
 Compare 2 images and get their hamming distance:
 
 ```php
-$hasher = new Jenssegers\ImageHash\ImageHash;
 $distance = $hasher->compare('path/to/image1.jpg', 'path/to/image2.jpg');
+```
+
+If you prefer to have decimal image hashes, you can change the mode during the construction of the `ImageHash` instance:
+
+```php
+$hasher = new ImageHash($implementation, ImageHash::DECIMAL);
 ```
 
 Demo
