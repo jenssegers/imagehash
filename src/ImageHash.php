@@ -131,15 +131,9 @@ class ImageHash
      */
     protected function loadImageResource($file)
     {
-        if (is_resource($file)) {
-            return $file;
-        }
-
         try {
             return $this->createResource(file_get_contents($file));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             throw new Exception("Unable to load file: $file");
         }
     }
@@ -152,12 +146,9 @@ class ImageHash
      */
     protected function createResource($data)
     {
-        try
-        {
+        try {
             return imagecreatefromstring($data);
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             throw new Exception("Unable to create GD2 resource");
         }
     }
