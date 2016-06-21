@@ -94,5 +94,4 @@ class OrientationTest extends PHPUnit_Framework_TestCase
             echo  "[" . get_class($hasher) . "] Total score: $score \n";
         }
     }
-
 }
