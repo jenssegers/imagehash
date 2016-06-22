@@ -43,7 +43,7 @@ class OrientationTest extends PHPUnit_Framework_TestCase
                 $imageHash->autoflip = true;
                 $newImages = array();
                 foreach ($images as $image) {
-                    if (preg_match('/-f0\.jpg$/',$image)) {
+                    if (preg_match('/-f0\.jpg$/', $image)) {
                         $newImages[] = $image;
                     }
                 }
