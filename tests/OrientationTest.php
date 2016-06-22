@@ -36,6 +36,20 @@ class OrientationTest extends PHPUnit_Framework_TestCase
             $imageHash->autoflip = true;
             $images = glob('tests/images/orientation/match*');
 
+            // Disable test flipping images on versions of PHP that include the
+            // imageflip GD function. Which means we need to remove the flip
+            // test images as well so they don't fail.
+            if (!function_exists('imageflip')) {
+                $imageHash->autoflip = true;
+                $newImages = array();
+                foreach ($images as $image) {
+                    if (preg_match('/-f0\.jpg$/',$image)) {
+                        $newImages[] = $image;
+                    }
+                }
+                $images = $newImages;
+            }
+
             $hashes = [];
             foreach ($images as $image) {
                 $hashes[$image] = $hash = $imageHash->hash($image);
