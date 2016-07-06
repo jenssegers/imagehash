@@ -83,6 +83,7 @@ class ImageHash
      *
      * @param int $hash1
      * @param int $hash2
+     * @return int
      */
     public function distance($hash1, $hash2)
     {
