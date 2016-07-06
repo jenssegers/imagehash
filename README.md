@@ -70,6 +70,15 @@ If you prefer to have decimal image hashes, you can change the mode during the c
 $hasher = new ImageHash($implementation, ImageHash::DECIMAL);
 ```
 
+To auto rotate and/or auto flip images before hashing, so that images that have been rotated in 90 degree increments and/or flipped produce the same hash:
+
+```php
+$hasher = new ImageHash($implementation);
+$hasher->autorotate = true;
+$hasher->autoflip = true;
+$hash = $hasher->hash('path/to/image.jpg');
+```
+
 Demo
 ----
 

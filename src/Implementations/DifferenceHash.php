@@ -13,15 +13,15 @@ class DifferenceHash implements Implementation
     {
         // For this implementation we create a 8x9 image.
         $width = static::SIZE + 1;
-        $heigth = static::SIZE;
+        $height = static::SIZE;
 
         // Resize the image.
-        $resized = imagecreatetruecolor($width, $heigth);
-        imagecopyresampled($resized, $resource, 0, 0, 0, 0, $width, $heigth, imagesx($resource), imagesy($resource));
+        $resized = imagecreatetruecolor($width, $height);
+        imagecopyresampled($resized, $resource, 0, 0, 0, 0, $width, $height, imagesx($resource), imagesy($resource));
 
         $hash = 0;
         $one = 1;
-        for ($y = 0; $y < $heigth; $y++) {
+        for ($y = 0; $y < $height; $y++) {
             // Get the pixel value for the leftmost pixel.
             $rgb = imagecolorsforindex($resized, imagecolorat($resized, 0, $y));
             $left = floor(($rgb['red'] + $rgb['green'] + $rgb['blue']) / 3);
