@@ -1,13 +1,17 @@
 <?php
 
 use Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\Implementation;
 use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
 
 class ImageTest extends PHPUnit_Framework_TestCase
 {
-    protected $precision = 10;
+    /** @var Implementation[] */
+    private $hashers;
+
+    private $precision = 10;
 
     public static function setUpBeforeClass()
     {
@@ -43,7 +47,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
 
             foreach ($hashes as $image => $hash) {
                 foreach ($hashes as $target => $compare) {
-                    if ($target == $image) {
+                    if ($target === $image) {
                         continue;
                     }
 
@@ -75,7 +79,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
 
             foreach ($hashes as $image => $hash) {
                 foreach ($hashes as $target => $compare) {
-                    if ($target == $image) {
+                    if ($target === $image) {
                         continue;
                     }
 
@@ -99,7 +103,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
 
             foreach ($images as $image) {
                 foreach ($images as $target) {
-                    if ($target == $image) {
+                    if ($target === $image) {
                         continue;
                     }
 
@@ -118,7 +122,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
 
             foreach ($images as $image) {
                 foreach ($images as $target) {
-                    if ($target == $image) {
+                    if ($target === $image) {
                         continue;
                     }
 

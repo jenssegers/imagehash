@@ -36,9 +36,9 @@ class ImageHash
     }
 
     /**
-     * Calculate a perceptual hash of an image.
+     * Calculate a perceptual hash of an image file.
      *
-     * @param  mixed   $resource
+     * @param  mixed   $resource GD2 resource or filename
      * @return int
      */
     public function hash($resource)
@@ -53,14 +53,27 @@ class ImageHash
         $hash = $this->implementation->hash($resource);
 
         if ($destroy) {
-            imagedestroy($resource);
+            $this->destroyResource($resource);
         }
 
-        if ($this->mode === self::HEXADECIMAL and is_int($hash)) {
-            return dechex($hash);
-        }
+        return $this->formatHash($hash);
+    }
 
-        return $hash;
+    /**
+     * Calculate a perceptual hash of an image string.
+     *
+     * @param  mixed $data Image data
+     * @return string
+     */
+    public function hashString($data)
+    {
+        $resource = $this->createResource($data);
+
+        $hash = $this->implementation->hash($resource);
+
+        $this->destroyResource($resource);
+
+        return $this->formatHash($hash);
     }
 
     /**
@@ -112,21 +125,53 @@ class ImageHash
     }
 
     /**
-     * Get a file resource.
+     * Get a GD2 resource from file.
      *
      * @param  string   $file
      * @return resource
      */
     protected function loadImageResource($file)
     {
-        if (is_resource($file)) {
-            return $file;
-        }
-
         try {
-            return imagecreatefromstring(file_get_contents($file));
+            return $this->createResource(file_get_contents($file));
         } catch (Exception $e) {
             throw new Exception("Unable to load file: $file");
         }
+    }
+
+    /**
+     * Get a GD2 resource from string.
+     *
+     * @param string $data
+     * @return resource
+     */
+    protected function createResource($data)
+    {
+        try {
+            return imagecreatefromstring($data);
+        } catch (Exception $e) {
+            throw new Exception("Unable to create GD2 resource");
+        }
+    }
+
+    /**
+     * Destroy GD2 resource.
+     *
+     * @param resource $resource
+     */
+    protected function destroyResource($resource)
+    {
+        imagedestroy($resource);
+    }
+
+    /**
+     * Format hash in hex.
+     *
+     * @param int $hash
+     * @return string|int
+     */
+    protected function formatHash($hash)
+    {
+        return $this->mode === static::HEXADECIMAL ? dechex($hash) : $hash;
     }
 }
