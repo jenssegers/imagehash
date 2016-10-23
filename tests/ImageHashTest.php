@@ -16,7 +16,11 @@ class ImageHashTest extends PHPUnit_Framework_TestCase
 
     public function testHashStringInvalidFile()
     {
-        $this->expectException('Exception');
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('InvalidArgumentException');
+        } else {
+            $this->setExpectedException('InvalidArgumentException');
+        }
 
         $this->imageHash->hashFromString('nonImageString');
     }
