@@ -4,7 +4,9 @@ use Jenssegers\ImageHash\ImageHash;
 
 class ImageHashTest extends PHPUnit_Framework_TestCase
 {
-    /** @var ImageHash */
+    /**
+	 * @var ImageHash
+	 */
     private $imageHash;
 
     public function setup()
@@ -16,13 +18,13 @@ class ImageHashTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException('Exception');
 
-        $this->imageHash->hashString('nonImageString');
+        $this->imageHash->hashFromString('nonImageString');
     }
 
     public function testHashStringSameAsFile()
     {
         $path = 'tests/images/forest/forest-low.jpg';
 
-        $this->assertSame($this->imageHash->hash($path), $this->imageHash->hashString(file_get_contents($path)));
+        $this->assertSame($this->imageHash->hash($path), $this->imageHash->hashFromString(file_get_contents($path)));
     }
 }

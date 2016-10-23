@@ -8,7 +8,9 @@ use Jenssegers\ImageHash\Implementations\PerceptualHash;
 
 class ImageTest extends PHPUnit_Framework_TestCase
 {
-    /** @var Implementation[] */
+    /**
+	 * @var Implementation[]
+	 */
     private $hashers;
 
     private $precision = 10;
@@ -16,9 +18,9 @@ class ImageTest extends PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         if (extension_loaded('gmp')) {
-            echo "INFO: gmp extension loaded \n";
+            echo "INFO: gmp extension loaded" . PHP_EOL;
         } else {
-            echo "INFO: gmp extension not loaded \n";
+            echo "INFO: gmp extension not loaded" . PHP_EOL;
         }
     }
 
@@ -42,7 +44,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
             foreach ($images as $image) {
                 $hashes[$image] = $hash = $imageHash->hash($image);
 
-                echo "[" . get_class($hasher) . "] $image = $hash \n";
+                echo "[" . get_class($hasher) . "] $image = $hash" . PHP_EOL;
             }
 
             foreach ($hashes as $image => $hash) {
@@ -55,11 +57,11 @@ class ImageTest extends PHPUnit_Framework_TestCase
                     $this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
                     $score += $distance;
 
-                    echo "[" . get_class($hasher) . "] $image ^ $target = $distance \n";
+                    echo "[" . get_class($hasher) . "] $image ^ $target = $distance" . PHP_EOL;
                 }
             }
 
-            echo  "[" . get_class($hasher) . "] Total score: $score \n";
+            echo  "[" . get_class($hasher) . "] Total score: $score" . PHP_EOL;
         }
     }
 
@@ -74,7 +76,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
             foreach ($images as $image) {
                 $hashes[$image] = $hash = $imageHash->hash($image);
 
-                echo "[" . get_class($hasher) . "] $image = $hash \n";
+                echo "[" . get_class($hasher) . "] $image = $hash" . PHP_EOL;
             }
 
             foreach ($hashes as $image => $hash) {
@@ -87,11 +89,11 @@ class ImageTest extends PHPUnit_Framework_TestCase
                     $this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
                     $score += $distance;
 
-                    echo "[" . get_class($hasher) . "] $image ^ $target = $distance \n";
+                    echo "[" . get_class($hasher) . "] $image ^ $target = $distance" . PHP_EOL;
                 }
             }
 
-            echo  "[" . get_class($hasher) . "] Total score: $score \n";
+            echo  "[" . get_class($hasher) . "] Total score: $score" . PHP_EOL;
         }
     }
 

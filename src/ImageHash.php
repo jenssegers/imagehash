@@ -1,12 +1,13 @@
 <?php namespace Jenssegers\ImageHash;
 
 use Exception;
+use InvalidArgumentException;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
 class ImageHash
 {
     /**
-     * Return hashes as hexacedimals.
+     * Return hashes as hexadecimals.
      */
     const HEXADECIMAL = 'hex';
 
@@ -65,7 +66,7 @@ class ImageHash
      * @param  mixed $data Image data
      * @return string
      */
-    public function hashString($data)
+    public function hashFromString($data)
     {
         $resource = $this->createResource($data);
 
@@ -135,7 +136,7 @@ class ImageHash
         try {
             return $this->createResource(file_get_contents($file));
         } catch (Exception $e) {
-            throw new Exception("Unable to load file: $file");
+            throw new InvalidArgumentException("Unable to load file: $file");
         }
     }
 
@@ -150,7 +151,7 @@ class ImageHash
         try {
             return imagecreatefromstring($data);
         } catch (Exception $e) {
-            throw new Exception("Unable to create GD2 resource");
+            throw new InvalidArgumentException('Unable to create GD2 resource');
         }
     }
 
