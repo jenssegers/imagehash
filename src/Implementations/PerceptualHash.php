@@ -106,8 +106,8 @@ class PerceptualHash implements Implementation
         if (count($pixels) % 2) {
             $median = $pixels[$middle];
         } else {
-            $low = $pixels[$middle];
-            $high = $pixels[$middle + 1];
+            $low = $pixels[$middle - 1];
+            $high = $pixels[$middle];
             $median = ($low + $high) / 2;
         }
 
