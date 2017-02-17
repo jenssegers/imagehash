@@ -24,22 +24,26 @@ class ImageHash
     protected $implementation;
 
     /**
+     * @var string
+     */
+    protected $mode;
+
+    /**
      * Constructor.
      *
      * @param Implementation $implementation
-     * @param string $mode
+     * @param string         $mode
      */
     public function __construct(Implementation $implementation = null, $mode = self::HEXADECIMAL)
     {
         $this->implementation = $implementation ?: new DifferenceHash;
-
         $this->mode = $mode;
     }
 
     /**
      * Calculate a perceptual hash of an image file.
      *
-     * @param  mixed   $resource GD2 resource or filename
+     * @param  mixed $resource GD2 resource or filename
      * @return int
      */
     public function hash($resource)
@@ -103,7 +107,7 @@ class ImageHash
     {
         if (extension_loaded('gmp')) {
             if ($this->mode === self::HEXADECIMAL) {
-                $dh = gmp_hamdist('0x' . $hash1, '0x' . $hash2);
+                $dh = gmp_hamdist('0x'.$hash1, '0x'.$hash2);
             } else {
                 $dh = gmp_hamdist($hash1, $hash2);
             }
@@ -128,7 +132,7 @@ class ImageHash
     /**
      * Get a GD2 resource from file.
      *
-     * @param  string   $file
+     * @param  string $file
      * @return resource
      */
     protected function loadImageResource($file)

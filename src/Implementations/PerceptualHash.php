@@ -95,7 +95,7 @@ class PerceptualHash implements Implementation
     /**
      * Get the median of the pixel values.
      *
-     * @param  array  $pixels
+     * @param  array $pixels
      * @return float
      */
     protected function median(array $pixels)
