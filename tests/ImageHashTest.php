@@ -5,8 +5,8 @@ use Jenssegers\ImageHash\ImageHash;
 class ImageHashTest extends PHPUnit_Framework_TestCase
 {
     /**
-	 * @var ImageHash
-	 */
+     * @var ImageHash
+     */
     private $imageHash;
 
     public function setup()
