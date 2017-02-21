@@ -9,8 +9,8 @@ use Jenssegers\ImageHash\Implementations\PerceptualHash;
 class ImageTest extends PHPUnit_Framework_TestCase
 {
     /**
-	 * @var Implementation[]
-	 */
+     * @var Implementation[]
+     */
     private $hashers;
 
     private $precision = 10;
