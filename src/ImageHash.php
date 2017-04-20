@@ -130,6 +130,21 @@ class ImageHash
     }
 
     /**
+     * Convert hexadecimal to signed decimal.
+     *
+     * @param string $hex
+     * @return int
+     */
+    public function hexdec($hex)
+    {
+        if (strlen($hex) == 16 && hexdec($hex[0]) > 8) {
+            return unpack('J', hex2bin($hex))[1];
+        }
+
+        return hexdec($hex);
+    }
+
+    /**
      * Get a GD2 resource from file.
      *
      * @param  string $file
@@ -178,20 +193,5 @@ class ImageHash
     protected function formatHash($hash)
     {
         return $this->mode === static::HEXADECIMAL ? dechex($hash) : $hash;
-    }
-
-    /**
-     * Convert hexadecimal to signed decimal.
-     *
-     * @param string $hex
-     * @return int
-     */
-    protected function hexdec($hex)
-    {
-        if (strlen($hex) == 16 && hexdec($hex[0]) > 8) {
-            return unpack('J', hex2bin($hex))[1];
-        }
-
-        return hexdec($hex);
     }
 }

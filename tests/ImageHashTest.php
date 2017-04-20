@@ -32,6 +32,18 @@ class ImageHashTest extends PHPUnit_Framework_TestCase
         $this->assertSame($this->imageHash->hash($path), $this->imageHash->hashFromString(file_get_contents($path)));
     }
 
+    public function testHexdecForNegativeIntegers()
+    {
+        // native hexdec dechex conversion working for positive integers
+        $this->assertEquals(1, hexdec(dechex(1)));
+        // but not working for negative
+        $this->assertNotEquals(-1, hexdec(dechex(-1)));
+
+        // custom hexdec implementation works for both
+        $this->assertEquals(1, $this->imageHash->hexdec(dechex(1)));
+        $this->assertEquals(-1, $this->imageHash->hexdec(dechex(-1)));
+    }
+
     public function testDistanceOfNegativeHashes()
     {
         $imageHash = new ImageHash(null, ImageHash::HEXADECIMAL);
