@@ -138,7 +138,8 @@ class ImageHash
     public function hexdec($hex)
     {
         if (strlen($hex) == 16 && hexdec($hex[0]) > 8) {
-            return unpack('J', hex2bin($hex))[1];
+            list($higher, $lower) = array_values(unpack('N2', hex2bin($hex)));
+            return $higher << 32 | $lower;
         }
 
         return hexdec($hex);
