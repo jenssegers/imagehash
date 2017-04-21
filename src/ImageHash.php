@@ -113,8 +113,8 @@ class ImageHash
             }
         } else {
             if ($this->mode === self::HEXADECIMAL) {
-                $hash1 = hexdec($hash1);
-                $hash2 = hexdec($hash2);
+                $hash1 = $this->hexdec($hash1);
+                $hash2 = $this->hexdec($hash2);
             }
 
             $dh = 0;
@@ -127,6 +127,22 @@ class ImageHash
         }
 
         return $dh;
+    }
+
+    /**
+     * Convert hexadecimal to signed decimal.
+     *
+     * @param string $hex
+     * @return int
+     */
+    public function hexdec($hex)
+    {
+        if (strlen($hex) == 16 && hexdec($hex[0]) > 8) {
+            list($higher, $lower) = array_values(unpack('N2', hex2bin($hex)));
+            return $higher << 32 | $lower;
+        }
+
+        return hexdec($hex);
     }
 
     /**
