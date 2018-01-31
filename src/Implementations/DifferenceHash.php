@@ -34,7 +34,7 @@ class DifferenceHash implements Implementation
                 // http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
                 if ($left > $right) {
                     $hash .= '1';
-                }else{
+                } else {
                     $hash .= '0';
                 }
                 // Prepare the next loop.
