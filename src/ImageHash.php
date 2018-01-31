@@ -197,11 +197,11 @@ class ImageHash
             $hex = '';
             //Shortening the string prevents any issues with php casting the string to an integer it cannot manage.
             $strings = str_split($hash, 8);
-            foreach($strings as $string) {
-                $hex .= str_pad(base_convert($string, 2, 16), 2, "0" , STR_PAD_LEFT);
+            foreach ($strings as $string) {
+                $hex .= str_pad(base_convert($string, 2, 16), 2, "0", STR_PAD_LEFT);
             }
             return $hex;
-        }else{
+        } else {
             return $hash;
         }
     }
