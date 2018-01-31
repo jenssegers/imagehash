@@ -193,6 +193,17 @@ class ImageHash
      */
     protected function formatHash($hash)
     {
-        return $this->mode === static::HEXADECIMAL ? dechex($hash) : $hash;
+        if($this->mode === static::HEXADECIMAL){
+            $hex = '';
+            //Shortening the string prevents any issues with php casting the string to an integer it cannot manage.
+            $strings = str_split($hash,8);
+            foreach($strings as $string)
+            {
+                $hex .= str_pad(base_convert($string,2, 16) , 2 , "0" , STR_PAD_LEFT);
+            }
+            return $hex;
+        }else{
+            return $hash;
+        }
     }
 }

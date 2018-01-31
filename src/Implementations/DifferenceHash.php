@@ -19,8 +19,7 @@ class DifferenceHash implements Implementation
         $resized = imagecreatetruecolor($width, $heigth);
         imagecopyresampled($resized, $resource, 0, 0, 0, 0, $width, $heigth, imagesx($resource), imagesy($resource));
 
-        $hash = 0;
-        $one = 1;
+        $hash = ''; // Binary as a string to avoid php interpreting as integer later
         for ($y = 0; $y < $heigth; $y++) {
             // Get the pixel value for the leftmost pixel.
             $rgb = imagecolorsforindex($resized, imagecolorat($resized, 0, $y));
@@ -34,12 +33,12 @@ class DifferenceHash implements Implementation
                 // Each hash bit is set based on whether the left pixel is brighter than the right pixel.
                 // http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
                 if ($left > $right) {
-                    $hash |= $one;
+                    $hash .= '1';
+                }else{
+                    $hash .= '0';
                 }
-
                 // Prepare the next loop.
                 $left = $right;
-                $one = $one << 1;
             }
         }
 
