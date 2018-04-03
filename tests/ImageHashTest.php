@@ -1,8 +1,9 @@
 <?php
 
 use Jenssegers\ImageHash\ImageHash;
+use PHPUnit\Framework\TestCase;
 
-class ImageHashTest extends PHPUnit_Framework_TestCase
+class ImageHashTest extends TestCase
 {
     /**
      * @var ImageHash
@@ -16,11 +17,7 @@ class ImageHashTest extends PHPUnit_Framework_TestCase
 
     public function testHashStringInvalidFile()
     {
-        if (method_exists($this, 'expectException')) {
-            $this->expectException('InvalidArgumentException');
-        } else {
-            $this->setExpectedException('InvalidArgumentException');
-        }
+        $this->setExpectedException('InvalidArgumentException');
 
         $this->imageHash->hashFromString('nonImageString');
     }
