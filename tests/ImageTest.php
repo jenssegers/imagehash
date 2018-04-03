@@ -5,8 +5,9 @@ use Jenssegers\ImageHash\Implementation;
 use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
+use PHPUnit\Framework\TestCase;
 
-class ImageTest extends PHPUnit_Framework_TestCase
+class ImageTest extends TestCase
 {
     /**
      * @var Implementation[]
@@ -154,12 +155,4 @@ class ImageTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_int($hash), $hash);
         $this->assertEquals(0, $imageHash->distance($hash, $hash));
     }
-
-    // public function testThrowsUnexceptedValueException()
-    // {
-    //     $this->setExpectedException('UnexpectedValueException');
-
-    //     $imageHash = new ImageHash;
-    //     $imageHash->distance("a", "b");
-    // }
 }
