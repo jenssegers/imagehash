@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": "^5.6|^7.0",
         "ext-gd": "*",
         "intervention/image": "^2.4"
     },
