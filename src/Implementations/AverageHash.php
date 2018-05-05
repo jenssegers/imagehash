@@ -1,5 +1,6 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
+use Intervention\Image\Image;
 use Jenssegers\ImageHash\Implementation;
 
 class AverageHash implements Implementation
@@ -7,25 +8,21 @@ class AverageHash implements Implementation
     const SIZE = 8;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function hash($resource)
+    public function hash(Image $image)
     {
         // Resize the image.
-        $resized = imagecreatetruecolor(static::SIZE, static::SIZE);
-        imagecopyresampled($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, imagesx($resource), imagesy($resource));
+        $resized = $image->resize(static::SIZE, static::SIZE);
 
         // Create an array of greyscale pixel values.
         $pixels = [];
         for ($y = 0; $y < static::SIZE; $y++) {
             for ($x = 0; $x < static::SIZE; $x++) {
-                $rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-                $pixels[] = floor(($rgb['red'] + $rgb['green'] + $rgb['blue']) / 3);
+                $rgb = $resized->pickColor($x, $y);
+                $pixels[] = floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
             }
         }
-
-        // Free up memory.
-        imagedestroy($resized);
 
         // Get the average pixel value.
         $average = floor(array_sum($pixels) / count($pixels));

@@ -1,5 +1,6 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
+use Intervention\Image\Image;
 use Jenssegers\ImageHash\Implementation;
 
 class PerceptualHash implements Implementation
@@ -7,30 +8,25 @@ class PerceptualHash implements Implementation
     const SIZE = 64;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function hash($resource)
+    public function hash(Image $image)
     {
         // Resize the image.
-        $resized = imagecreatetruecolor(static::SIZE, static::SIZE);
-        imagecopyresampled($resized, $resource, 0, 0, 0, 0, static::SIZE, static::SIZE, imagesx($resource), imagesy($resource));
+        $resized = $image->resize(static::SIZE, static::SIZE);
 
         // Get luma value (YCbCr) from RGB colors and calculate the DCT for each row.
         $matrix = [];
         $row = [];
         $rows = [];
         $col = [];
-        $cols = [];
         for ($y = 0; $y < static::SIZE; $y++) {
             for ($x = 0; $x < static::SIZE; $x++) {
-                $rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-                $row[$x] = floor(($rgb['red'] * 0.299) + ($rgb['green'] * 0.587) + ($rgb['blue'] * 0.114));
+                $rgb = $resized->pickColor($x, $y);
+                $row[$x] = floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
             }
             $rows[$y] = $this->DCT1D($row);
         }
-
-        // Free up memory.
-        imagedestroy($resized);
 
         // Calculate the DCT for each column.
         for ($x = 0; $x < static::SIZE; $x++) {
@@ -68,6 +64,7 @@ class PerceptualHash implements Implementation
      * Perform a 1 dimension Discrete Cosine Transformation.
      *
      * @param array $pixels
+     * @return array
      */
     protected function DCT1D(array $pixels)
     {
@@ -77,12 +74,12 @@ class PerceptualHash implements Implementation
         for ($i = 0; $i < $size; $i++) {
             $sum = 0;
             for ($j = 0; $j < $size; $j++) {
-                $sum += $pixels[$j] * cos($i * pi() * ($j + 0.5) / ($size));
+                $sum += $pixels[$j] * cos($i * pi() * ($j + 0.5) / $size);
             }
 
             $sum *= sqrt(2 / $size);
 
-            if ($i == 0) {
+            if ($i === 0) {
                 $sum *= 1 / sqrt(2);
             }
 
@@ -101,7 +98,7 @@ class PerceptualHash implements Implementation
     protected function median(array $pixels)
     {
         sort($pixels, SORT_NUMERIC);
-        $middle = floor(count($pixels) / 2);
+        $middle = (int) floor(count($pixels) / 2);
 
         if (count($pixels) % 2) {
             $median = $pixels[$middle];
