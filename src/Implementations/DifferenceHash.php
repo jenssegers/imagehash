@@ -1,5 +1,6 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
+use Intervention\Image\Image;
 use Jenssegers\ImageHash\Implementation;
 
 class DifferenceHash implements Implementation
@@ -7,29 +8,28 @@ class DifferenceHash implements Implementation
     const SIZE = 8;
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function hash($resource)
+    public function hash(Image $image)
     {
         // For this implementation we create a 8x9 image.
         $width = static::SIZE + 1;
-        $heigth = static::SIZE;
+        $height = static::SIZE;
 
         // Resize the image.
-        $resized = imagecreatetruecolor($width, $heigth);
-        imagecopyresampled($resized, $resource, 0, 0, 0, 0, $width, $heigth, imagesx($resource), imagesy($resource));
+        $resized = $image->resize($width, $height);
 
         $hash = 0;
         $one = 1;
-        for ($y = 0; $y < $heigth; $y++) {
+        for ($y = 0; $y < $height; $y++) {
             // Get the pixel value for the leftmost pixel.
-            $rgb = imagecolorsforindex($resized, imagecolorat($resized, 0, $y));
-            $left = floor(($rgb['red'] + $rgb['green'] + $rgb['blue']) / 3);
+            $rgb = $resized->pickColor(0, $y);
+            $left = floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
 
             for ($x = 1; $x < $width; $x++) {
                 // Get the pixel value for each pixel starting from position 1.
-                $rgb = imagecolorsforindex($resized, imagecolorat($resized, $x, $y));
-                $right = floor(($rgb['red'] + $rgb['green'] + $rgb['blue']) / 3);
+                $rgb = $resized->pickColor($x, $y);
+                $right = floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
 
                 // Each hash bit is set based on whether the left pixel is brighter than the right pixel.
                 // http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
@@ -42,9 +42,6 @@ class DifferenceHash implements Implementation
                 $one = $one << 1;
             }
         }
-
-        // Free up memory.
-        imagedestroy($resized);
 
         return $hash;
     }

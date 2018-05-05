@@ -1,12 +1,14 @@
 <?php namespace Jenssegers\ImageHash;
 
+use Intervention\Image\Image;
+
 interface Implementation
 {
     /**
      * Calculate the hash for the given resource.
      *
-     * @param  resource $resource
+     * @param Image $image
      * @return int
      */
-    public function hash($resource);
+    public function hash(Image $image);
 }

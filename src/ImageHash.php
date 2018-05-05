@@ -1,8 +1,9 @@
 <?php namespace Jenssegers\ImageHash;
 
-use Exception;
-use InvalidArgumentException;
+use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
+use RuntimeException;
 
 class ImageHash
 {
@@ -29,37 +30,38 @@ class ImageHash
     protected $mode;
 
     /**
+     * @var Image
+     */
+    private $driver;
+
+    /**
      * Constructor.
      *
      * @param Implementation $implementation
-     * @param string         $mode
+     * @param string $mode
+     * @param ImageManager $driver
      */
-    public function __construct(Implementation $implementation = null, $mode = self::HEXADECIMAL)
-    {
+    public function __construct(
+        Implementation $implementation = null,
+        $mode = self::HEXADECIMAL,
+        ImageManager $driver = null
+    ) {
         $this->implementation = $implementation ?: new DifferenceHash;
         $this->mode = $mode;
+        $this->driver = $driver ?: $this->defaultDriver();
     }
 
     /**
-     * Calculate a perceptual hash of an image file.
+     * Calculate a perceptual hash of an image.
      *
-     * @param  mixed $resource GD2 resource or filename
+     * @param mixed $image
      * @return int
      */
-    public function hash($resource)
+    public function hash($image)
     {
-        $destroy = false;
+        $image = $this->driver->make($image);
 
-        if (! is_resource($resource)) {
-            $resource = $this->loadImageResource($resource);
-            $destroy = true;
-        }
-
-        $hash = $this->implementation->hash($resource);
-
-        if ($destroy) {
-            $this->destroyResource($resource);
-        }
+        $hash = $this->implementation->hash($image);
 
         return $this->formatHash($hash);
     }
@@ -67,18 +69,13 @@ class ImageHash
     /**
      * Calculate a perceptual hash of an image string.
      *
+     * @deprecated
      * @param  mixed $data Image data
      * @return string
      */
     public function hashFromString($data)
     {
-        $resource = $this->createResource($data);
-
-        $hash = $this->implementation->hash($resource);
-
-        $this->destroyResource($resource);
-
-        return $this->formatHash($hash);
+        return $this->hash($data);
     }
 
     /**
@@ -107,7 +104,7 @@ class ImageHash
     {
         if (extension_loaded('gmp')) {
             if ($this->mode === self::HEXADECIMAL) {
-                $dh = gmp_hamdist('0x'.$hash1, '0x'.$hash2);
+                $dh = gmp_hamdist('0x' . $hash1, '0x' . $hash2);
             } else {
                 $dh = gmp_hamdist($hash1, $hash2);
             }
@@ -137,7 +134,7 @@ class ImageHash
      */
     public function hexdec($hex)
     {
-        if (strlen($hex) == 16 && hexdec($hex[0]) > 8) {
+        if (strlen($hex) === 16 && hexdec($hex[0]) > 8) {
             list($higher, $lower) = array_values(unpack('N2', hex2bin($hex)));
             return $higher << 32 | $lower;
         }
@@ -146,43 +143,12 @@ class ImageHash
     }
 
     /**
-     * Get a GD2 resource from file.
-     *
-     * @param  string $file
-     * @return resource
-     */
-    protected function loadImageResource($file)
-    {
-        try {
-            return $this->createResource(file_get_contents($file));
-        } catch (Exception $e) {
-            throw new InvalidArgumentException("Unable to load file: $file");
-        }
-    }
-
-    /**
-     * Get a GD2 resource from string.
-     *
      * @param string $data
-     * @return resource
+     * @return Image
      */
     protected function createResource($data)
     {
-        try {
-            return imagecreatefromstring($data);
-        } catch (Exception $e) {
-            throw new InvalidArgumentException('Unable to create GD2 resource');
-        }
-    }
-
-    /**
-     * Destroy GD2 resource.
-     *
-     * @param resource $resource
-     */
-    protected function destroyResource($resource)
-    {
-        imagedestroy($resource);
+        return $this->driver->make($data);
     }
 
     /**
@@ -194,5 +160,22 @@ class ImageHash
     protected function formatHash($hash)
     {
         return $this->mode === static::HEXADECIMAL ? dechex($hash) : $hash;
+    }
+
+    /**
+     * @return ImageManager
+     * @throws RuntimeException
+     */
+    protected function defaultDriver()
+    {
+        if (extension_loaded('gd')) {
+            return new ImageManager(['driver' => 'gd']);
+        }
+
+        if (extension_loaded('imagick')) {
+            return new ImageManager(['driver' => 'imagick']);
+        }
+
+        throw new RuntimeException('Please install GD or ImageMagick');
     }
 }

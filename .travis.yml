@@ -1,13 +1,10 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
   - 7.1
   - 7.2
-  - hhvm
 
 sudo: false
 
@@ -20,4 +17,4 @@ script:
   - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v; fi;'
+  - php vendor/bin/coveralls -v
