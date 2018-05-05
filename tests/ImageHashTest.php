@@ -1,5 +1,6 @@
 <?php
 
+use Intervention\Image\Exception\NotReadableException;
 use Jenssegers\ImageHash\ImageHash;
 use PHPUnit\Framework\TestCase;
 
@@ -17,14 +18,14 @@ class ImageHashTest extends TestCase
 
     public function testHashStringInvalidFile()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException(NotReadableException::class);
 
         $this->imageHash->hashFromString('nonImageString');
     }
 
     public function testHashStringSameAsFile()
     {
-        $path = 'tests/images/forest/forest-low.jpg';
+        $path = __DIR__ . '/images/forest/forest-low.jpg';
 
         $this->assertSame($this->imageHash->hash($path), $this->imageHash->hashFromString(file_get_contents($path)));
     }

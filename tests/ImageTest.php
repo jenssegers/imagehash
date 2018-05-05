@@ -39,7 +39,7 @@ class ImageTest extends TestCase
         foreach ($this->hashers as $hasher) {
             $score = 0;
             $imageHash = new ImageHash($hasher);
-            $images = glob('tests/images/forest/*');
+            $images = glob(__DIR__ . '/images/forest/*');
 
             $hashes = [];
             foreach ($images as $image) {
@@ -62,7 +62,7 @@ class ImageTest extends TestCase
                 }
             }
 
-            echo  "[" . get_class($hasher) . "] Total score: $score" . PHP_EOL;
+            echo "[" . get_class($hasher) . "] Total score: $score" . PHP_EOL;
         }
     }
 
@@ -71,7 +71,7 @@ class ImageTest extends TestCase
         foreach ($this->hashers as $hasher) {
             $score = 0;
             $imageHash = new ImageHash($hasher);
-            $images = glob('tests/images/office/*');
+            $images = glob(__DIR__ . '/images/office/*');
 
             $hashes = [];
             foreach ($images as $image) {
@@ -94,7 +94,7 @@ class ImageTest extends TestCase
                 }
             }
 
-            echo  "[" . get_class($hasher) . "] Total score: $score" . PHP_EOL;
+            echo "[" . get_class($hasher) . "] Total score: $score" . PHP_EOL;
         }
     }
 
@@ -102,7 +102,7 @@ class ImageTest extends TestCase
     {
         foreach ($this->hashers as $hasher) {
             $imageHash = new ImageHash($hasher);
-            $images = glob('tests/images/forest/*');
+            $images = glob(__DIR__ . '/images/forest/*');
 
             foreach ($images as $image) {
                 foreach ($images as $target) {
@@ -121,7 +121,7 @@ class ImageTest extends TestCase
     {
         foreach ($this->hashers as $hasher) {
             $imageHash = new ImageHash($hasher);
-            $images = glob('tests/images/office/*');
+            $images = glob(__DIR__ . '/images/office/*');
 
             foreach ($images as $image) {
                 foreach ($images as $target) {
@@ -139,7 +139,7 @@ class ImageTest extends TestCase
     public function testHexadecimalMode()
     {
         $imageHash = new ImageHash(new DifferenceHash(), ImageHash::HEXADECIMAL);
-        $images = glob('tests/images/office/*');
+        $images = glob(__DIR__ . '/images/office/*');
 
         $hash = $imageHash->hash($images[0]);
         $this->assertTrue(ctype_xdigit($hash), $hash);
@@ -149,10 +149,10 @@ class ImageTest extends TestCase
     public function testDecimalMode()
     {
         $imageHash = new ImageHash(new DifferenceHash(), ImageHash::DECIMAL);
-        $images = glob('tests/images/office/*');
+        $images = glob(__DIR__ . '/images/office/*');
 
         $hash = $imageHash->hash($images[0]);
-        $this->assertTrue(is_int($hash), $hash);
+        $this->assertInternalType('int', $hash);
         $this->assertEquals(0, $imageHash->distance($hash, $hash));
     }
 }
