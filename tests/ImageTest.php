@@ -19,9 +19,9 @@ class ImageTest extends TestCase
     public static function setUpBeforeClass()
     {
         if (extension_loaded('gmp')) {
-            echo "INFO: gmp extension loaded" . PHP_EOL;
+            echo 'INFO: gmp extension loaded' . PHP_EOL;
         } else {
-            echo "INFO: gmp extension not loaded" . PHP_EOL;
+            echo 'INFO: gmp extension not loaded' . PHP_EOL;
         }
     }
 

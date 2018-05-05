@@ -16,18 +16,11 @@ class ImageHashTest extends TestCase
         $this->imageHash = new ImageHash();
     }
 
-    public function testHashStringInvalidFile()
+    public function testHashInvalidFile()
     {
         $this->expectException(NotReadableException::class);
 
-        $this->imageHash->hashFromString('nonImageString');
-    }
-
-    public function testHashStringSameAsFile()
-    {
-        $path = __DIR__ . '/images/forest/forest-low.jpg';
-
-        $this->assertSame($this->imageHash->hash($path), $this->imageHash->hashFromString(file_get_contents($path)));
+        $this->imageHash->hash('nonImageString');
     }
 
     public function testHexdecForNegativeIntegers()
