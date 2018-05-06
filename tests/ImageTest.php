@@ -16,13 +16,6 @@ class ImageTest extends TestCase
 
     private $precision = 10;
 
-    public static function setUpBeforeClass()
-    {
-        echo 'INFO: GMP installed:' . (extension_loaded('gmp') ? 'yes' : 'no') . PHP_EOL;
-        echo 'INFO: GD installed:' . (extension_loaded('gd') ? 'yes' : 'no') . PHP_EOL;
-        echo 'INFO: ImageMagick installed:' . (extension_loaded('imagick') ? 'yes' : 'no') . PHP_EOL;
-    }
-
     public function setUp()
     {
         $this->hashers = [
