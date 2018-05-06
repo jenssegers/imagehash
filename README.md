@@ -9,14 +9,19 @@ ImageHash
 
 Perceptual hashes are a different concept compared to cryptographic hash functions like MD5 and SHA1. With cryptographic hashes, the hash values are random. The data used to generate the hash acts like a random seed, so the same data will generate the same result, but different data will create different results. Comparing two SHA1 hash values really only tells you two things. If the hashes are different, then the data is different. And if the hashes are the same, then the data is likely the same. In contrast, perceptual hashes can be compared -- giving you a sense of similarity between the two data sets.
 
-This code was based on:
+This code was inspired/based on:
  - https://github.com/kennethrapp/phasher
  - http://www.phash.org
  - http://www.hackerfactor.com/blog/?/archives/529-Kind-of-Like-That.html
  - http://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
  - http://blog.iconfinder.com/detecting-duplicate-images-using-python
 
-**WARNING**: the PerceptualHash implementation is still under development.
+Requirements
+------------
+
+ - PHP 5.6 or higher
+ - The [gd](http://php.net/manual/en/book.image.php) or [imagick](http://php.net/manual/en/book.imagick.php) extension
+ - Optionally, install the [GMP](http://php.net/manual/en/book.gmp.php) extension for faster fingerprint comparisons
 
 Installation
 ------------
@@ -25,17 +30,22 @@ Install using composer:
 
 	composer require jenssegers/imagehash
 
-It is suggested that you also install the [GMP extension](http://php.net/manual/en/book.gmp.php) for PHP. This will result in faster Hamming distance calculations.
-
 Usage
 -----
 
-Calculating a perceptual hash for an image using the default implementation:
+The library comes with 3 built-in hashing implementations:
+
+ - `Jenssegers\ImageHash\Implementation\AverageHash` - Hash based the average image color
+ - `Jenssegers\ImageHash\Implementation\DifferenceHash` - Hash based on the previous pixel
+ - `Jenssegers\ImageHash\Implementation\PerceptualHash` - **Still under development**
+
+Choose one of these implementations. If you don't know which one to use, try the `DifferenceHash` implementation.
 
 ```php
 use Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
-$hasher = new ImageHash;
+$hasher = new ImageHash(new DifferenceHash());
 $hash = $hasher->hash('path/to/image.jpg');
 ```
 
@@ -46,23 +56,6 @@ $distance = $hasher->distance($hash1, $hash2);
 ```
 
 Equal images will not always have a distance of 0, so you will need to decide at which distance you will evaluate images as equal. For the image set that I tested, a max distance of 5 was acceptable. But this will depend on the implementation, the images and the number of images. For example; when comparing a small set of images, a lower maximum distances should be acceptable as the chances of false positives are quite low. If however you are comparing a large amount of images, 5 might already be too much.
-
-Calculating a perceptual hash for an image using a different implementation:
-
-```php
-use Jenssegers\ImageHash\Implementations\DifferenceHash;
-use Jenssegers\ImageHash\ImageHash;
-
-$implementation = new DifferenceHash;
-$hasher = new ImageHash($implementation);
-$hash = $hasher->hash('path/to/image.jpg');
-```
-
-Compare 2 images and get their hamming distance:
-
-```php
-$distance = $hasher->compare('path/to/image1.jpg', 'path/to/image2.jpg');
-```
 
 If you prefer to have decimal image hashes, you can change the mode during the construction of the `ImageHash` instance:
 
