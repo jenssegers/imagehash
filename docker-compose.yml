@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  gd:
+    build:
+      context: .
+      dockerfile: docker/gd.Dockerfile
+    volumes:
+      - .:/code
+    working_dir: /code
+    command: ./vendor/bin/phpunit
+
+  imagick:
+    build:
+      context: .
+      dockerfile: docker/imagick.Dockerfile
+    volumes:
+      - .:/code
+    working_dir: /code
+    command: ./vendor/bin/phpunit
+
+  gmp:
+    build:
+      context: .
+      dockerfile: docker/gmp.Dockerfile
+    volumes:
+      - .:/code
+    working_dir: /code
+    command: ./vendor/bin/phpunit
