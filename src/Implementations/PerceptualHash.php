@@ -15,25 +15,25 @@ class PerceptualHash implements Implementation
         // Resize the image.
         $resized = $image->resize(static::SIZE, static::SIZE);
 
-        // Get luma value (YCbCr) from RGB colors and calculate the DCT for each row.
         $matrix = [];
         $row = [];
         $rows = [];
         $col = [];
+
         for ($y = 0; $y < static::SIZE; $y++) {
             for ($x = 0; $x < static::SIZE; $x++) {
                 $rgb = $resized->pickColor($x, $y);
-                $row[$x] = floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
+                // Get luma value (YCbCr) from RGB colors and calculate the DCT for each row.
+                $row[$x] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
             }
-            $rows[$y] = $this->DCT1D($row);
+            $rows[$y] = $this->calculateDCT($row);
         }
 
-        // Calculate the DCT for each column.
         for ($x = 0; $x < static::SIZE; $x++) {
             for ($y = 0; $y < static::SIZE; $y++) {
                 $col[$y] = $rows[$y][$x];
             }
-            $matrix[$x] = $this->DCT1D($col);
+            $matrix[$x] = $this->calculateDCT($col);
         }
 
         // Extract the top 8x8 pixels.
@@ -44,14 +44,15 @@ class PerceptualHash implements Implementation
             }
         }
 
-        // Calculate the median.
-        $median = $this->median($pixels);
+        // Calculate the average value from top 8x8 pixels, except for the first one.
+        $n = count($pixels) - 1;
+        $average = floor(array_sum(array_slice($pixels, 1, $n)) / $n);
 
         // Calculate hash.
         $hash = 0;
         $one = 1;
         foreach ($pixels as $pixel) {
-            if ($pixel > $median) {
+            if ($pixel > $average) {
                 $hash |= $one;
             }
             $one = $one << 1;
@@ -63,26 +64,23 @@ class PerceptualHash implements Implementation
     /**
      * Perform a 1 dimension Discrete Cosine Transformation.
      *
-     * @param array $pixels
+     * @param array $matrix
      * @return array
      */
-    protected function DCT1D(array $pixels)
+    protected function calculateDCT(array $matrix)
     {
         $transformed = [];
-        $size = count($pixels);
+        $size = count($matrix);
 
         for ($i = 0; $i < $size; $i++) {
             $sum = 0;
             for ($j = 0; $j < $size; $j++) {
-                $sum += $pixels[$j] * cos($i * pi() * ($j + 0.5) / $size);
+                $sum += $matrix[$j] * cos($i * pi() * ($j + 0.5) / $size);
             }
-
             $sum *= sqrt(2 / $size);
-
             if ($i === 0) {
                 $sum *= 1 / sqrt(2);
             }
-
             $transformed[$i] = $sum;
         }
 
