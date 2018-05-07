@@ -8,7 +8,7 @@ class PerceptualHash implements Implementation
     /**
      * Downscaled image size.
      */
-    const SIZE = 64;
+    const SIZE = 32;
 
     /**
      * Use luma values.
