@@ -140,23 +140,18 @@ class PerceptualHash implements Implementation
     /**
      * Get the median of the pixel values.
      *
-     * @param  array $pixels
+     * @param array $pixels
      * @return float
      */
     protected function median(array $pixels)
     {
         sort($pixels, SORT_NUMERIC);
-        $middle = (int) floor(count($pixels) / 2);
 
-        if (count($pixels) % 2) {
-            $median = $pixels[$middle];
-        } else {
-            $low = $pixels[$middle];
-            $high = $pixels[$middle + 1];
-            $median = ($low + $high) / 2;
+        if (count($pixels) % 2 === 0) {
+            return $pixels[count($pixels) / 2 - 1] + $pixels[count($pixels) / 2] / 2;
         }
 
-        return $median;
+        return $pixels[(int) floor(count($pixels) / 2)];
     }
 
     /**
