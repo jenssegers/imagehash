@@ -23,14 +23,31 @@ class PerceptualHash implements Implementation
     /**
      * @var string
      */
+    const AVERAGE = 'average';
+
+    /**
+     * @var string
+     */
+    const MEDIAN = 'median';
+
+    /**
+     * @var string
+     */
     protected $reductionMethod;
 
     /**
-     * @param string $reductionMethod
+     * @var string
      */
-    public function __construct($reductionMethod = self::LUMA)
+    protected $comparisonMethod;
+
+    /**
+     * @param string $reductionMethod
+     * @param string $comparisonMethod
+     */
+    public function __construct($reductionMethod = self::LUMA, $comparisonMethod = self::AVERAGE)
     {
         $this->reductionMethod = $reductionMethod;
+        $this->comparisonMethod = $comparisonMethod;
     }
 
     /**
@@ -75,15 +92,17 @@ class PerceptualHash implements Implementation
             }
         }
 
-        // Calculate the average value from top 8x8 pixels, except for the first one.
-        $n = count($pixels) - 1;
-        $average = floor(array_sum(array_slice($pixels, 1, $n)) / $n);
+        if ($this->comparisonMethod === self::MEDIAN) {
+            $compare = $this->median($pixels);
+        } else {
+            $compare = $this->average($pixels);
+        }
 
         // Calculate hash.
         $hash = 0;
         $one = 1;
         foreach ($pixels as $pixel) {
-            if ($pixel > $average) {
+            if ($pixel > $compare) {
                 $hash |= $one;
             }
             $one = $one << 1;
@@ -138,5 +157,17 @@ class PerceptualHash implements Implementation
         }
 
         return $median;
+    }
+
+    /**
+     * @param array $pixels
+     * @return float
+     */
+    protected function average(array $pixels)
+    {
+        // Calculate the average value from top 8x8 pixels, except for the first one.
+        $n = count($pixels) - 1;
+
+        return array_sum(array_slice($pixels, 1, $n)) / $n;
     }
 }

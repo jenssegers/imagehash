@@ -21,8 +21,10 @@ class ImageTest extends TestCase
         $this->hashers = [
             new AverageHash(),
             new DifferenceHash(),
-            new PerceptualHash(),
-            new PerceptualHash(PerceptualHash::GREYSCALE)
+            new PerceptualHash(PerceptualHash::LUMA, PerceptualHash::AVERAGE),
+            new PerceptualHash(PerceptualHash::LUMA, PerceptualHash::MEDIAN),
+            new PerceptualHash(PerceptualHash::GREYSCALE, PerceptualHash::AVERAGE),
+            new PerceptualHash(PerceptualHash::GREYSCALE, PerceptualHash::MEDIAN),
         ];
     }
 
