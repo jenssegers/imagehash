@@ -19,9 +19,10 @@ class ImageTest extends TestCase
     public function setUp()
     {
         $this->hashers = [
-            new AverageHash,
-            new DifferenceHash,
-            new PerceptualHash,
+            new AverageHash(),
+            new DifferenceHash(),
+            new PerceptualHash(),
+            new PerceptualHash(PerceptualHash::GREYSCALE)
         ];
     }
 

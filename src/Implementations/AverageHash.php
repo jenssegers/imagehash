@@ -5,6 +5,9 @@ use Jenssegers\ImageHash\Implementation;
 
 class AverageHash implements Implementation
 {
+    /**
+     * Downscaled image size.
+     */
     const SIZE = 8;
 
     /**

@@ -5,7 +5,33 @@ use Jenssegers\ImageHash\Implementation;
 
 class PerceptualHash implements Implementation
 {
+    /**
+     * Downscaled image size.
+     */
     const SIZE = 64;
+
+    /**
+     * Use luma values.
+     */
+    const LUMA = 'luma';
+
+    /**
+     * Use greyscale value.
+     */
+    const GREYSCALE = 'greyscale';
+
+    /**
+     * @var string
+     */
+    protected $reductionMethod;
+
+    /**
+     * @param string $reductionMethod
+     */
+    public function __construct($reductionMethod = self::LUMA)
+    {
+        $this->reductionMethod = $reductionMethod;
+    }
 
     /**
      * @inheritdoc
@@ -23,8 +49,13 @@ class PerceptualHash implements Implementation
         for ($y = 0; $y < static::SIZE; $y++) {
             for ($x = 0; $x < static::SIZE; $x++) {
                 $rgb = $resized->pickColor($x, $y);
-                // Get luma value (YCbCr) from RGB colors and calculate the DCT for each row.
-                $row[$x] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
+
+                // Get the luma or greyscale value from the pixel.
+                if ($this->reductionMethod === self::GREYSCALE) {
+                    $row[$x] = (int) floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
+                } else {
+                    $row[$x] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
+                }
             }
             $rows[$y] = $this->calculateDCT($row);
         }
