@@ -3,7 +3,6 @@
 use Jenssegers\ImageHash\ImageHash;
 use Jenssegers\ImageHash\Implementation;
 use Jenssegers\ImageHash\Implementations\AverageHash;
-use Jenssegers\ImageHash\Implementations\BlockHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
 use PHPUnit\Framework\TestCase;
