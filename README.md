@@ -12,6 +12,7 @@ Perceptual hashes are a different concept compared to cryptographic hash functio
 This code was inspired/based on:
  - https://github.com/kennethrapp/phasher
  - http://www.phash.org
+ - http://blockhash.io
  - http://www.hackerfactor.com/blog/?/archives/529-Kind-of-Like-That.html
  - http://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
  - http://blog.iconfinder.com/detecting-duplicate-images-using-python
@@ -38,6 +39,7 @@ The library comes with 3 built-in hashing implementations:
  - `Jenssegers\ImageHash\Implementation\AverageHash` - Hash based the average image color
  - `Jenssegers\ImageHash\Implementation\DifferenceHash` - Hash based on the previous pixel
  - `Jenssegers\ImageHash\Implementation\PerceptualHash` - **Still under development**
+ - `Jenssegers\ImageHash\Implementation\BlockHash` - **Still under development**
 
 Choose one of these implementations. If you don't know which one to use, try the `DifferenceHash` implementation.
 
@@ -62,6 +64,8 @@ If you prefer to have decimal image hashes, you can change the mode during the c
 ```php
 $hasher = new ImageHash($implementation, ImageHash::DECIMAL);
 ```
+
+Some implementations allow some configuration, be sure to check the constructor.
 
 Demo
 ----

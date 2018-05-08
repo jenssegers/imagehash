@@ -3,6 +3,7 @@
 use Jenssegers\ImageHash\ImageHash;
 use Jenssegers\ImageHash\Implementation;
 use Jenssegers\ImageHash\Implementations\AverageHash;
+use Jenssegers\ImageHash\Implementations\BlockHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
 use PHPUnit\Framework\TestCase;
@@ -12,13 +13,13 @@ class ImageTest extends TestCase
     /**
      * @var Implementation[]
      */
-    private $hashers;
+    private $implementations;
 
-    private $precision = 10;
+    private $threshold = 10;
 
     public function setUp()
     {
-        $this->hashers = [
+        $this->implementations = [
             new AverageHash(),
             new DifferenceHash(),
             new PerceptualHash(PerceptualHash::LUMA, PerceptualHash::AVERAGE),
@@ -30,7 +31,7 @@ class ImageTest extends TestCase
 
     public function testEqualHashes()
     {
-        foreach ($this->hashers as $hasher) {
+        foreach ($this->implementations as $hasher) {
             $score = 0;
             $imageHash = new ImageHash($hasher);
             $images = glob(__DIR__ . '/images/forest/*');
@@ -49,7 +50,7 @@ class ImageTest extends TestCase
                     }
 
                     $distance = $imageHash->distance($hash, $compare);
-                    $this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
+                    $this->assertLessThan($this->threshold, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
                     $score += $distance;
 
                     echo "[" . get_class($hasher) . "] $image ^ $target = $distance" . PHP_EOL;
@@ -62,7 +63,7 @@ class ImageTest extends TestCase
 
     public function testDifferentHashes()
     {
-        foreach ($this->hashers as $hasher) {
+        foreach ($this->implementations as $hasher) {
             $score = 0;
             $imageHash = new ImageHash($hasher);
             $images = glob(__DIR__ . '/images/office/*');
@@ -81,7 +82,7 @@ class ImageTest extends TestCase
                     }
 
                     $distance = $imageHash->distance($hash, $compare);
-                    $this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
+                    $this->assertGreaterThan($this->threshold, $distance, "[" . get_class($hasher) . "] $image ($hash) ^ $target ($compare)");
                     $score += $distance;
 
                     echo "[" . get_class($hasher) . "] $image ^ $target = $distance" . PHP_EOL;
@@ -94,7 +95,7 @@ class ImageTest extends TestCase
 
     public function testCompareEqual()
     {
-        foreach ($this->hashers as $hasher) {
+        foreach ($this->implementations as $hasher) {
             $imageHash = new ImageHash($hasher);
             $images = glob(__DIR__ . '/images/forest/*');
 
@@ -105,7 +106,7 @@ class ImageTest extends TestCase
                     }
 
                     $distance = $imageHash->compare($image, $target);
-                    $this->assertLessThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
+                    $this->assertLessThan($this->threshold, $distance, "[" . get_class($hasher) . "] $image <=> $target");
                 }
             }
         }
@@ -113,7 +114,7 @@ class ImageTest extends TestCase
 
     public function testCompareDifferent()
     {
-        foreach ($this->hashers as $hasher) {
+        foreach ($this->implementations as $hasher) {
             $imageHash = new ImageHash($hasher);
             $images = glob(__DIR__ . '/images/office/*');
 
@@ -124,7 +125,7 @@ class ImageTest extends TestCase
                     }
 
                     $distance = $imageHash->compare($image, $target);
-                    $this->assertGreaterThan($this->precision, $distance, "[" . get_class($hasher) . "] $image <=> $target");
+                    $this->assertGreaterThan($this->threshold, $distance, "[" . get_class($hasher) . "] $image <=> $target");
                 }
             }
         }
