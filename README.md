@@ -34,7 +34,7 @@ Install using composer:
 Usage
 -----
 
-The library comes with 3 built-in hashing implementations:
+The library comes with 4 built-in hashing implementations:
 
  - `Jenssegers\ImageHash\Implementation\AverageHash` - Hash based the average image color
  - `Jenssegers\ImageHash\Implementation\DifferenceHash` - Hash based on the previous pixel
