@@ -38,10 +38,10 @@ The library comes with 4 built-in hashing implementations:
 
  - `Jenssegers\ImageHash\Implementation\AverageHash` - Hash based the average image color
  - `Jenssegers\ImageHash\Implementation\DifferenceHash` - Hash based on the previous pixel
+  - `Jenssegers\ImageHash\Implementation\BlockHash` - Hash based on blockhash.io
  - `Jenssegers\ImageHash\Implementation\PerceptualHash` - **Still under development**
- - `Jenssegers\ImageHash\Implementation\BlockHash` - **Still under development**
 
-Choose one of these implementations. If you don't know which one to use, try the `DifferenceHash` implementation.
+Choose one of these implementations. If you don't know which one to use, try the `DifferenceHash` implementation. Some implementations allow some configuration, be sure to check the constructor.
 
 ```php
 use Jenssegers\ImageHash\ImageHash;
@@ -49,23 +49,37 @@ use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
 $hasher = new ImageHash(new DifferenceHash());
 $hash = $hasher->hash('path/to/image.jpg');
+
+echo $hash;
+// or
+echo $hash->toHex();
 ```
 
-The resulting hash is a 64 bit hexadecimal image fingerprint that can be stored in your database once calculated. The hamming distance is used to compare two image fingerprints for similarities. Low distance values will indicate that the images are similar or the same, high distance values indicate that the images are different. Use the following method to detect if images are similar or not:
+The resulting `Hash` object, is a hexadecimal image fingerprint that can be stored in your database once calculated. The hamming distance is used to compare two image fingerprints for similarities. Low distance values will indicate that the images are similar or the same, high distance values indicate that the images are different. Use the following method to detect if images are similar or not:
 
 ```php
 $distance = $hasher->distance($hash1, $hash2);
+// or
+$distance = $hash1->distance($hash2);
 ```
 
 Equal images will not always have a distance of 0, so you will need to decide at which distance you will evaluate images as equal. For the image set that I tested, a max distance of 5 was acceptable. But this will depend on the implementation, the images and the number of images. For example; when comparing a small set of images, a lower maximum distances should be acceptable as the chances of false positives are quite low. If however you are comparing a large amount of images, 5 might already be too much.
 
-If you prefer to have decimal image hashes, you can change the mode during the construction of the `ImageHash` instance:
+The `Hash` object can return the internal binary hash in a couple of different format:
 
 ```php
-$hasher = new ImageHash($implementation, ImageHash::DECIMAL);
+echo $hash->toHex(); // 7878787c7c707c3c
+echo $hash->toBin(); // 0111100001111000011110000111110001111100011100000111110000111100
+echo $hash->toInt(); // 8680820757815655484
 ```
 
-Some implementations allow some configuration, be sure to check the constructor.
+Choose your preference for storing your hashes in your database. If you want to reconstruct a `Hash` object from a previous calculated value, use:
+
+```php
+$hash = Hash::fromHex('7878787c7c707c3c');
+$hash = Hash::fromBin('0111100001111000011110000111110001111100011100000111110000111100');
+$hash = Hash::fromInt('8680820757815655484');
+```
 
 Demo
 ----

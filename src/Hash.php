@@ -43,6 +43,15 @@ class Hash implements JsonSerializable
     }
 
     /**
+     * @param int $int
+     * @return self
+     */
+    public static function fromInt($int)
+    {
+        return new self(new BigInteger($int, 10));
+    }
+
+    /**
      * @return string
      */
     public function toHex()
