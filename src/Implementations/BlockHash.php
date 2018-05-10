@@ -3,24 +3,56 @@
 namespace Jenssegers\ImageHash\Implementations;
 
 use Intervention\Image\Image;
+use InvalidArgumentException;
+use Jenssegers\ImageHash\Hash;
 use Jenssegers\ImageHash\Implementation;
 
 class BlockHash implements Implementation
 {
     /**
+     * @var string
+     */
+    const PRECISE = 'precise';
+
+    /**
+     * @var string
+     */
+    const QUICK = 'quick';
+
+    /**
+     * @var string
+     */
+    protected $mode;
+
+    /**
      * @var int
      */
-    const BITS = 64;
+    protected $size;
+
+    /**
+     * @param string $mode
+     * @param int $size
+     */
+    public function __construct($size = 16, $mode = self::PRECISE)
+    {
+        if ($size % 4 !== 0) {
+            throw new InvalidArgumentException('Amount of bits needs to be dividable by 4');
+        }
+
+        if (!in_array($mode, [self::QUICK, self::PRECISE])) {
+            throw new InvalidArgumentException('Unknown mode ' . $mode);
+        }
+
+        $this->size = $size;
+        $this->mode = $mode;
+    }
 
     /**
      * @inheritdoc
      */
     public function hash(Image $image)
     {
-        $width = $image->getWidth();
-        $height = $image->getHeight();
-
-        if ($width % self::BITS === 0 && $height % self::BITS === 0) {
+        if ($this->mode === self::QUICK) {
             return $this->even($image);
         }
 
@@ -29,19 +61,19 @@ class BlockHash implements Implementation
 
     /**
      * @param Image $image
-     * @return int
+     * @return Hash
      */
     private function even(Image $image)
     {
         $width = $image->getWidth();
         $height = $image->getHeight();
-        $blocksizeX = (int) floor($width / self::BITS);
-        $blocksizeY = (int) floor($height / self::BITS);
+        $blocksizeX = (int) floor($width / $this->size);
+        $blocksizeY = (int) floor($height / $this->size);
 
         $result = [];
 
-        for ($y = 0; $y <= self::BITS; $y++) {
-            for ($x = 0; $x <= self::BITS; $x++) {
+        for ($y = 0; $y <= $this->size; $y++) {
+            for ($x = 0; $x <= $this->size; $x++) {
                 $value = 0;
 
                 for ($iy = 0; $iy <= $blocksizeY; $iy++) {
@@ -62,27 +94,24 @@ class BlockHash implements Implementation
 
     /**
      * @param Image $image
-     * @return int
+     * @return Hash
      */
     private function uneven(Image $image)
     {
-        $width = $image->getWidth();
-        $height = $image->getHeight();
-        $evenX = $width % self::BITS === 0;
-        $evenY = $height % self::BITS === 0;
-        $blockWidth = $width / self::BITS;
-        $blockHeight = $height / self::BITS;
+        $imageWidth = $image->getWidth();
+        $imageHeight = $image->getHeight();
+        $evenX = $imageWidth % $this->size === 0;
+        $evenY = $imageHeight % $this->size === 0;
+        $blockWidth = $imageWidth / $this->size;
+        $blockHeight = $imageHeight / $this->size;
 
         // Initialize empty blocks
         $blocks = [];
-        for ($i = 0; $i < self::BITS; $i++) {
-            $blocks[] = [];
-            for ($j = 0; $j < self::BITS; $j++) {
-                $blocks[$i][$j] = 0;
-            }
+        for ($i = 0; $i < $this->size; $i++) {
+            $blocks[$i] = array_fill(0, $this->size, 0);
         }
 
-        for ($y = 0; $y < $height; $y++) {
+        for ($y = 0; $y < $imageHeight; $y++) {
             if ($evenY) {
                 // Don't bother dividing y, if the size evenly divides by bits
                 $blockTop = $blockBottom = (int) floor($y / $blockHeight);
@@ -97,7 +126,7 @@ class BlockHash implements Implementation
                 $weightBottom = $yFrac;
 
                 // y_int will be 0 on bottom/right borders and on block boundaries
-                if ($yInt > 0 || ($y + 1) === $height) {
+                if ($yInt > 0 || ($y + 1) === $imageHeight) {
                     $blockTop = $blockBottom = (int) floor($y / $blockHeight);
                 } else {
                     $blockTop = (int) floor($y / $blockHeight);
@@ -105,7 +134,7 @@ class BlockHash implements Implementation
                 }
             }
 
-            for ($x = 0; $x < $width; $x++) {
+            for ($x = 0; $x < $imageWidth; $x++) {
                 $rgb = $image->pickColor($x, $y);
                 $value = $rgb[0] + $rgb[1] + $rgb[2];
 
@@ -122,7 +151,7 @@ class BlockHash implements Implementation
                     $weightRight = $xFrac;
 
                     // $xInt will be 0 on bottom/right borders and on block boundaries
-                    if ($xInt > 0 || ($x + 1) === $width) {
+                    if ($xInt > 0 || ($x + 1) === $imageWidth) {
                         $blockLeft = $blockRight = (int) floor($x / $blockWidth);
                     } else {
                         $blockLeft = (int) floor($x / $blockWidth);
@@ -139,8 +168,8 @@ class BlockHash implements Implementation
         }
 
         $result = [];
-        for ($i = 0; $i < self::BITS; $i++) {
-            for ($j = 0; $j < self::BITS; $j++) {
+        for ($i = 0; $i < $this->size; $i++) {
+            for ($j = 0; $j < $this->size; $j++) {
                 $result[] = $blocks[$i][$j];
             }
         }
@@ -150,8 +179,8 @@ class BlockHash implements Implementation
 
     /**
      * @param array $blocks
-     * @param int $pixelsPerBlock
-     * @return int
+     * @param int|float $pixelsPerBlock
+     * @return Hash
      */
     protected function blocksToBits(array $blocks, $pixelsPerBlock)
     {
@@ -160,13 +189,12 @@ class BlockHash implements Implementation
         // Compare medians across four horizontal bands
         $bandsize = (int) floor(count($blocks) / 4);
 
-        $hash = 0;
-        $one = 1;
+        $bits = [];
 
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             $median = $this->median(array_slice($blocks, $i * $bandsize, $bandsize));
 
-            for ($j = $i * $bandsize; $j <= ($i + 1) * $bandsize; $j++) {
+            for ($j = $i * $bandsize; $j < ($i + 1) * $bandsize; $j++) {
                 $value = $blocks[$j];
 
                 // Output a 1 if the block is brighter than the median.
@@ -175,15 +203,11 @@ class BlockHash implements Implementation
                 // of blocks of value equal to the median. To avoid
                 // generating hashes of all zeros or ones, in that case output
                 // 0 if the median is in the lower value space, 1 otherwise
-                if ($value > $median || (abs($value - $median) < 1 && $median > $halfBlockValue)) {
-                    $hash |= $one;
-                }
-
-                $one = $one << 1;
+                $bits[$j] = (int) ($value > $median || (abs($value - $median) < 1 && $median > $halfBlockValue));
             }
         }
 
-        return $hash;
+        return Hash::fromBits($bits);
     }
 
     /**
@@ -197,7 +221,7 @@ class BlockHash implements Implementation
         sort($pixels, SORT_NUMERIC);
 
         if (count($pixels) % 2 === 0) {
-            return $pixels[count($pixels) / 2 - 1] + $pixels[count($pixels) / 2] / 2;
+            return ($pixels[count($pixels) / 2 - 1] + $pixels[count($pixels) / 2]) / 2;
         }
 
         return $pixels[(int) floor(count($pixels) / 2)];

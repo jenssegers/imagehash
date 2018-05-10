@@ -5,10 +5,10 @@ use Intervention\Image\Image;
 interface Implementation
 {
     /**
-     * Calculate the hash for the given resource.
+     * Calculate the hash for the given image.
      *
      * @param Image $image
-     * @return int
+     * @return Hash
      */
     public function hash(Image $image);
 }

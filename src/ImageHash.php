@@ -8,26 +8,9 @@ use RuntimeException;
 class ImageHash
 {
     /**
-     * Return hashes as hexadecimals.
-     */
-    const HEXADECIMAL = 'hex';
-
-    /**
-     * Return hashes as decimals.
-     */
-    const DECIMAL = 'dec';
-
-    /**
-     * The hashing implementation.
-     *
      * @var Implementation
      */
     protected $implementation;
-
-    /**
-     * @var string
-     */
-    protected $mode;
 
     /**
      * @var Image
@@ -35,19 +18,14 @@ class ImageHash
     private $driver;
 
     /**
-     * Constructor.
-     *
      * @param Implementation $implementation
-     * @param string $mode
      * @param ImageManager $driver
      */
     public function __construct(
         Implementation $implementation = null,
-        $mode = self::HEXADECIMAL,
         ImageManager $driver = null
     ) {
-        $this->implementation = $implementation ?: new DifferenceHash;
-        $this->mode = $mode;
+        $this->implementation = $implementation ?: $this->defaultDriver();
         $this->driver = $driver ?: $this->defaultDriver();
     }
 
@@ -55,34 +33,20 @@ class ImageHash
      * Calculate a perceptual hash of an image.
      *
      * @param mixed $image
-     * @return int
+     * @return Hash
      */
     public function hash($image)
     {
         $image = $this->driver->make($image);
 
-        $hash = $this->implementation->hash($image);
-
-        return $this->formatHash($hash);
-    }
-
-    /**
-     * Calculate a perceptual hash of an image string.
-     *
-     * @deprecated
-     * @param  mixed $data Image data
-     * @return string
-     */
-    public function hashFromString($data)
-    {
-        return $this->hash($data);
+        return $this->implementation->hash($image);
     }
 
     /**
      * Compare 2 images and get the hamming distance.
      *
-     * @param  mixed $resource1
-     * @param  mixed $resource2
+     * @param mixed $resource1
+     * @param mixed $resource2
      * @return int
      */
     public function compare($resource1, $resource2)
@@ -94,52 +58,15 @@ class ImageHash
     }
 
     /**
-     * Calculate the Hamming Distance.
+     * Calculate the Hamming Distance between 2 hashes.
      *
-     * @param int $hash1
-     * @param int $hash2
+     * @param Hash $hash1
+     * @param Hash $hash2
      * @return int
      */
-    public function distance($hash1, $hash2)
+    public function distance(Hash $hash1, Hash $hash2)
     {
-        if (extension_loaded('gmp')) {
-            if ($this->mode === self::HEXADECIMAL) {
-                $dh = gmp_hamdist('0x' . $hash1, '0x' . $hash2);
-            } else {
-                $dh = gmp_hamdist($hash1, $hash2);
-            }
-        } else {
-            if ($this->mode === self::HEXADECIMAL) {
-                $hash1 = $this->hexdec($hash1);
-                $hash2 = $this->hexdec($hash2);
-            }
-
-            $dh = 0;
-            for ($i = 0; $i < 64; $i++) {
-                $k = (1 << $i);
-                if (($hash1 & $k) !== ($hash2 & $k)) {
-                    $dh++;
-                }
-            }
-        }
-
-        return $dh;
-    }
-
-    /**
-     * Convert hexadecimal to signed decimal.
-     *
-     * @param string $hex
-     * @return int
-     */
-    public function hexdec($hex)
-    {
-        if (strlen($hex) === 16 && hexdec($hex[0]) > 8) {
-            list($higher, $lower) = array_values(unpack('N2', hex2bin($hex)));
-            return $higher << 32 | $lower;
-        }
-
-        return hexdec($hex);
+        return $hash1->distance($hash2);
     }
 
     /**
@@ -152,14 +79,11 @@ class ImageHash
     }
 
     /**
-     * Format hash in hex.
-     *
-     * @param int $hash
-     * @return string|int
+     * @return Implementation
      */
-    protected function formatHash($hash)
+    protected function defaultImplementation()
     {
-        return $this->mode === static::HEXADECIMAL ? dechex($hash) : $hash;
+        return new DifferenceHash();
     }
 
     /**

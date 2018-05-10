@@ -13,72 +13,72 @@ class CompatibilityTest extends TestCase
             [
                 AverageHash::class,
                 __DIR__ . '/images/forest/forest-copyright.jpg',
-                '3c3e0e3e3e1e1e1e',
+                '7878787c7c707c3c',
             ],
             [
                 AverageHash::class,
                 __DIR__ . '/images/forest/forest-high.jpg',
-                '3c3e0e1a3a1e1e1e',
+                '78787c5c58707c3c',
             ],
             [
                 AverageHash::class,
                 __DIR__ . '/images/forest/forest-low.jpg',
-                '3c3e0e1a3a1e1e1e',
+                '7878785c58707c3c',
             ],
             [
                 AverageHash::class,
                 __DIR__ . '/images/forest/forest-thumb.jpg',
-                '3c3e0e1a3a1e1e1e',
+                '78787c5c58707c3c',
             ],
             [
                 DifferenceHash::class,
                 __DIR__ . '/images/forest/forest-copyright.jpg',
-                'f0fceed4d2ecfcf4',
+                '2f3f374b2b771f07',
             ],
             [
                 DifferenceHash::class,
                 __DIR__ . '/images/forest/forest-high.jpg',
-                'f0fceef6f2ecfcf4',
+                '2f3f374f6f7f1f07',
             ],
             [
                 DifferenceHash::class,
                 __DIR__ . '/images/forest/forest-low.jpg',
-                'f0fceef6f2ecfcf4',
+                '2f3f374f6f7f1f07',
             ],
             [
                 DifferenceHash::class,
                 __DIR__ . '/images/forest/forest-thumb.jpg',
-                'f0fceef6f2ecfcf4',
+                '2f3f374f6f773f07',
             ],
             [
                 AverageHash::class,
                 __DIR__ . '/images/office/tumblr_ndyfdoR6Wp1tubinno1_1280.jpg',
-                'fffcf6f781000000',
+                '81ef6f3fff',
             ],
             [
                 AverageHash::class,
                 __DIR__ . '/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg',
-                '80acac2c098f1f17',
+                'e8f8d19034353501',
             ],
             [
                 AverageHash::class,
                 __DIR__ . '/images/office/tumblr_ndyfq386o41tubinno1_1280.jpg',
-                '787878434b371707',
+                'e0e8ecd2c21e1e1e',
             ],
             [
                 DifferenceHash::class,
                 __DIR__ . '/images/office/tumblr_ndyfdoR6Wp1tubinno1_1280.jpg',
-                '9458101353c3c146',
+                '6283c3cac8581a29',
             ],
             [
                 DifferenceHash::class,
                 __DIR__ . '/images/office/tumblr_ndyfnr7lk21tubinno1_1280.jpg',
-                '69684858535b7575',
+                'aeaedaca12121216',
             ],
             [
                 DifferenceHash::class,
                 __DIR__ . '/images/office/tumblr_ndyfq386o41tubinno1_1280.jpg',
-                'e1e1e2a7bbaf6faf',
+                'f5f6f7dde5478787',
             ],
         ];
     }
@@ -92,6 +92,6 @@ class CompatibilityTest extends TestCase
         $hasher = new ImageHash($implementation);
 
         $hash = $hasher->hash($path);
-        $this->assertEquals($precalculated, $hash);
+        $this->assertEquals($precalculated, $hash->toHex());
     }
 }

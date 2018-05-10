@@ -1,14 +1,23 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
 use Intervention\Image\Image;
+use Jenssegers\ImageHash\Hash;
 use Jenssegers\ImageHash\Implementation;
 
 class DifferenceHash implements Implementation
 {
     /**
-     * Downscaled image size.
+     * @var int
      */
-    const SIZE = 8;
+    protected $size;
+
+    /**
+     * @param int $size
+     */
+    public function __construct($size = 8)
+    {
+        $this->size = $size;
+    }
 
     /**
      * @inheritdoc
@@ -16,36 +25,32 @@ class DifferenceHash implements Implementation
     public function hash(Image $image)
     {
         // For this implementation we create a 8x9 image.
-        $width = static::SIZE + 1;
-        $height = static::SIZE;
+        $width = $this->size + 1;
+        $height = $this->size;
 
         // Resize the image.
         $resized = $image->resize($width, $height);
 
-        $hash = 0;
-        $one = 1;
+        $bits = [];
         for ($y = 0; $y < $height; $y++) {
             // Get the pixel value for the leftmost pixel.
             $rgb = $resized->pickColor(0, $y);
-            $left = floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
+            $left = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
 
             for ($x = 1; $x < $width; $x++) {
                 // Get the pixel value for each pixel starting from position 1.
                 $rgb = $resized->pickColor($x, $y);
-                $right = floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
+                $right = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
 
                 // Each hash bit is set based on whether the left pixel is brighter than the right pixel.
                 // http://www.hackerfactor.com/blog/index.php?/archives/529-Kind-of-Like-That.html
-                if ($left > $right) {
-                    $hash |= $one;
-                }
+                $bits[] = (int) ($left > $right);
 
                 // Prepare the next loop.
                 $left = $right;
-                $one = $one << 1;
             }
         }
 
-        return $hash;
+        return Hash::fromBits($bits);
     }
 }

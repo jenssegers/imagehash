@@ -1,14 +1,23 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
 use Intervention\Image\Image;
+use Jenssegers\ImageHash\Hash;
 use Jenssegers\ImageHash\Implementation;
 
 class AverageHash implements Implementation
 {
     /**
-     * Downscaled image size.
+     * @var int
      */
-    const SIZE = 8;
+    protected $size;
+
+    /**
+     * @param int $size
+     */
+    public function __construct($size = 8)
+    {
+        $this->size = $size;
+    }
 
     /**
      * @inheritdoc
@@ -16,14 +25,14 @@ class AverageHash implements Implementation
     public function hash(Image $image)
     {
         // Resize the image.
-        $resized = $image->resize(static::SIZE, static::SIZE);
+        $resized = $image->resize($this->size, $this->size);
 
         // Create an array of greyscale pixel values.
         $pixels = [];
-        for ($y = 0; $y < static::SIZE; $y++) {
-            for ($x = 0; $x < static::SIZE; $x++) {
+        for ($y = 0; $y < $this->size; $y++) {
+            for ($x = 0; $x < $this->size; $x++) {
                 $rgb = $resized->pickColor($x, $y);
-                $pixels[] = floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
+                $pixels[] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
             }
         }
 
@@ -31,15 +40,10 @@ class AverageHash implements Implementation
         $average = floor(array_sum($pixels) / count($pixels));
 
         // Each hash bit is set based on whether the current pixels value is above or below the average.
-        $hash = 0;
-        $one = 1;
-        foreach ($pixels as $pixel) {
-            if ($pixel > $average) {
-                $hash |= $one;
-            }
-            $one = $one << 1;
-        }
+        $bits = array_map(function ($pixel) use ($average) {
+            return (int) ($pixel > $average);
+        }, $pixels);
 
-        return $hash;
+        return Hash::fromBits($bits);
     }
 }

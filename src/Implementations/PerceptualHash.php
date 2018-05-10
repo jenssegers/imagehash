@@ -1,25 +1,12 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
 use Intervention\Image\Image;
+use InvalidArgumentException;
+use Jenssegers\ImageHash\Hash;
 use Jenssegers\ImageHash\Implementation;
 
 class PerceptualHash implements Implementation
 {
-    /**
-     * Downscaled image size.
-     */
-    const SIZE = 32;
-
-    /**
-     * Use luma values.
-     */
-    const LUMA = 'luma';
-
-    /**
-     * Use greyscale value.
-     */
-    const GREYSCALE = 'greyscale';
-
     /**
      * @var string
      */
@@ -29,6 +16,11 @@ class PerceptualHash implements Implementation
      * @var string
      */
     const MEDIAN = 'median';
+
+    /**
+     * @var int
+     */
+    protected $size;
 
     /**
      * @var string
@@ -41,11 +33,16 @@ class PerceptualHash implements Implementation
     protected $comparisonMethod;
 
     /**
-     * @param string $reductionMethod
+     * @param int $size
      * @param string $comparisonMethod
      */
-    public function __construct($reductionMethod = self::LUMA, $comparisonMethod = self::AVERAGE)
+    public function __construct($size = 32, $comparisonMethod = self::AVERAGE)
     {
+        if (!in_array($comparisonMethod, [self::AVERAGE, self::MEDIAN])) {
+            throw new InvalidArgumentException('Unknown comparison mode ' . $comparisonMethod);
+        }
+
+        $this->size = $size;
         $this->reductionMethod = $reductionMethod;
         $this->comparisonMethod = $comparisonMethod;
     }
@@ -56,29 +53,23 @@ class PerceptualHash implements Implementation
     public function hash(Image $image)
     {
         // Resize the image.
-        $resized = $image->resize(static::SIZE, static::SIZE);
+        $resized = $image->resize($this->size, $this->size);
 
         $matrix = [];
         $row = [];
         $rows = [];
         $col = [];
 
-        for ($y = 0; $y < static::SIZE; $y++) {
-            for ($x = 0; $x < static::SIZE; $x++) {
+        for ($y = 0; $y < $this->size; $y++) {
+            for ($x = 0; $x < $this->size; $x++) {
                 $rgb = $resized->pickColor($x, $y);
-
-                // Get the luma or greyscale value from the pixel.
-                if ($this->reductionMethod === self::GREYSCALE) {
-                    $row[$x] = (int) floor(($rgb[0] + $rgb[1] + $rgb[2]) / 3);
-                } else {
-                    $row[$x] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
-                }
+                $row[$x] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
             }
             $rows[$y] = $this->calculateDCT($row);
         }
 
-        for ($x = 0; $x < static::SIZE; $x++) {
-            for ($y = 0; $y < static::SIZE; $y++) {
+        for ($x = 0; $x < $this->size; $x++) {
+            for ($y = 0; $y < $this->size; $y++) {
                 $col[$y] = $rows[$y][$x];
             }
             $matrix[$x] = $this->calculateDCT($col);
@@ -99,16 +90,12 @@ class PerceptualHash implements Implementation
         }
 
         // Calculate hash.
-        $hash = 0;
-        $one = 1;
+        $bits = [];
         foreach ($pixels as $pixel) {
-            if ($pixel > $compare) {
-                $hash |= $one;
-            }
-            $one = $one << 1;
+            $bits[] = (int) ($pixel > $compare);
         }
 
-        return $hash;
+        return Hash::fromBits($bits);
     }
 
     /**
@@ -148,7 +135,7 @@ class PerceptualHash implements Implementation
         sort($pixels, SORT_NUMERIC);
 
         if (count($pixels) % 2 === 0) {
-            return $pixels[count($pixels) / 2 - 1] + $pixels[count($pixels) / 2] / 2;
+            return ($pixels[count($pixels) / 2 - 1] + $pixels[count($pixels) / 2]) / 2;
         }
 
         return $pixels[(int) floor(count($pixels) / 2)];
