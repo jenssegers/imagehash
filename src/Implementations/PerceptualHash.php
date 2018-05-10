@@ -25,11 +25,6 @@ class PerceptualHash implements Implementation
     /**
      * @var string
      */
-    protected $reductionMethod;
-
-    /**
-     * @var string
-     */
     protected $comparisonMethod;
 
     /**
@@ -43,7 +38,6 @@ class PerceptualHash implements Implementation
         }
 
         $this->size = $size;
-        $this->reductionMethod = $reductionMethod;
         $this->comparisonMethod = $comparisonMethod;
     }
 
