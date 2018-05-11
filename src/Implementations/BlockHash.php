@@ -105,7 +105,7 @@ class BlockHash implements Implementation
         $blockWidth = $imageWidth / $this->size;
         $blockHeight = $imageHeight / $this->size;
 
-        // Initialize empty blocks
+        // Initialize empty blocks.
         $blocks = [];
         for ($i = 0; $i < $this->size; $i++) {
             $blocks[$i] = array_fill(0, $this->size, 0);
@@ -113,7 +113,7 @@ class BlockHash implements Implementation
 
         for ($y = 0; $y < $imageHeight; $y++) {
             if ($evenY) {
-                // Don't bother dividing y, if the size evenly divides by bits
+                // Don't bother dividing y, if the size evenly divides by bits.
                 $blockTop = $blockBottom = (int) floor($y / $blockHeight);
                 $weightTop = 1;
                 $weightBottom = 0;
@@ -125,7 +125,7 @@ class BlockHash implements Implementation
                 $weightTop = 1 - $yFrac;
                 $weightBottom = $yFrac;
 
-                // y_int will be 0 on bottom/right borders and on block boundaries
+                // yInt will be 0 on bottom/right borders and on block boundaries.
                 if ($yInt > 0 || ($y + 1) === $imageHeight) {
                     $blockTop = $blockBottom = (int) floor($y / $blockHeight);
                 } else {
@@ -150,7 +150,7 @@ class BlockHash implements Implementation
                     $weightLeft = (1 - $xFrac);
                     $weightRight = $xFrac;
 
-                    // $xInt will be 0 on bottom/right borders and on block boundaries
+                    // xInt will be 0 on bottom/right borders and on block boundaries.
                     if ($xInt > 0 || ($x + 1) === $imageWidth) {
                         $blockLeft = $blockRight = (int) floor($x / $blockWidth);
                     } else {
@@ -159,7 +159,7 @@ class BlockHash implements Implementation
                     }
                 }
 
-                // add weighted pixel value to relevant blocks
+                // Add weighted pixel value to relevant blocks.
                 $blocks[$blockTop][$blockLeft] += $value * $weightTop * $weightLeft;
                 $blocks[$blockTop][$blockRight] += $value * $weightTop * $weightRight;
                 $blocks[$blockBottom][$blockLeft] += $value * $weightBottom * $weightLeft;
@@ -186,7 +186,7 @@ class BlockHash implements Implementation
     {
         $halfBlockValue = $pixelsPerBlock * 256 * 3 / 2;
 
-        // Compare medians across four horizontal bands
+        // Compare medians across four horizontal bands.
         $bandsize = (int) floor(count($blocks) / 4);
 
         $bits = [];
@@ -202,7 +202,7 @@ class BlockHash implements Implementation
                 // end up being 0 or the max value, and thus having a lot
                 // of blocks of value equal to the median. To avoid
                 // generating hashes of all zeros or ones, in that case output
-                // 0 if the median is in the lower value space, 1 otherwise
+                // 0 if the median is in the lower value space, 1 otherwise.
                 $bits[$j] = (int) ($value > $median || (abs($value - $median) < 1 && $median > $halfBlockValue));
             }
         }

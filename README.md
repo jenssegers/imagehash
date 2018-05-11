@@ -27,6 +27,8 @@ Requirements
 Installation
 ------------
 
+*This package has not reached a stable version yet, backwards compatibility may be broken between 0.x releases. Make sure to lock your version if you intend to use this in production!*
+
 Install using composer:
 
 	composer require jenssegers/imagehash
@@ -38,8 +40,8 @@ The library comes with 4 built-in hashing implementations:
 
  - `Jenssegers\ImageHash\Implementation\AverageHash` - Hash based the average image color
  - `Jenssegers\ImageHash\Implementation\DifferenceHash` - Hash based on the previous pixel
-  - `Jenssegers\ImageHash\Implementation\BlockHash` - Hash based on blockhash.io
- - `Jenssegers\ImageHash\Implementation\PerceptualHash` - **Still under development**
+  - `Jenssegers\ImageHash\Implementation\BlockHash` - Hash based on blockhash.io **Still under development**
+ - `Jenssegers\ImageHash\Implementation\PerceptualHash` - The original pHash **Still under development**
 
 Choose one of these implementations. If you don't know which one to use, try the `DifferenceHash` implementation. Some implementations allow some configuration, be sure to check the constructor.
 
