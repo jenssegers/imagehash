@@ -72,12 +72,12 @@ class BlockHash implements Implementation
 
         $result = [];
 
-        for ($y = 0; $y <= $this->size; $y++) {
-            for ($x = 0; $x <= $this->size; $x++) {
+        for ($y = 0; $y < $this->size; $y++) {
+            for ($x = 0; $x < $this->size; $x++) {
                 $value = 0;
 
-                for ($iy = 0; $iy <= $blocksizeY; $iy++) {
-                    for ($ix = 0; $ix <= $blocksizeX; $ix++) {
+                for ($iy = 0; $iy < $blocksizeY; $iy++) {
+                    for ($ix = 0; $ix < $blocksizeX; $ix++) {
                         $cx = $x * $blocksizeX + $ix;
                         $cy = $y * $blocksizeY + $iy;
                         $rgb = $image->pickColor($cx, $cy);
