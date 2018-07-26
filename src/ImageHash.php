@@ -25,7 +25,7 @@ class ImageHash
         Implementation $implementation = null,
         ImageManager $driver = null
     ) {
-        $this->implementation = $implementation ?: $this->defaultDriver();
+        $this->implementation = $implementation ?: $this->defaultImplementation();
         $this->driver = $driver ?: $this->defaultDriver();
     }
 
