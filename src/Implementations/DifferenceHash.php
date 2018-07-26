@@ -24,22 +24,26 @@ class DifferenceHash implements Implementation
      */
     public function hash(Image $image)
     {
-        // For this implementation we create a 8x9 image.
+        // For this implementation we create a 8x9 greyscaled image.
+        
+        // Reduce color
+        $image->greyscale();
+        
         $width = $this->size + 1;
         $height = $this->size;
 
         // Resize the image.
-        $resized = $image->resize($width, $height);
+        $image->resize($width, $height);
 
         $bits = [];
         for ($y = 0; $y < $height; $y++) {
             // Get the pixel value for the leftmost pixel.
-            $rgb = $resized->pickColor(0, $y);
+            $rgb = $image->pickColor(0, $y);
             $left = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
 
             for ($x = 1; $x < $width; $x++) {
                 // Get the pixel value for each pixel starting from position 1.
-                $rgb = $resized->pickColor($x, $y);
+                $rgb = $image->pickColor($x, $y);
                 $right = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
 
                 // Each hash bit is set based on whether the left pixel is brighter than the right pixel.
