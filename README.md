@@ -1,7 +1,7 @@
 ImageHash
 =========
 
-[![Latest Stable Version](http://img.shields.io/github/release/jenssegers/imagehash.svg)](https://packagist.org/packages/jenssegers/imagehash) [![Build Status](http://img.shields.io/travis/jenssegers/imagehash.svg)](https://travis-ci.org/jenssegers/imagehash) [![Coverage Status](http://img.shields.io/coveralls/jenssegers/imagehash.svg)](https://coveralls.io/r/jenssegers/imagehash) [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/jenssegers)
+[![Financial Contributors on Open Collective](https://opencollective.com/imagehash/all/badge.svg?label=financial+contributors)](https://opencollective.com/imagehash) [![Latest Stable Version](http://img.shields.io/github/release/jenssegers/imagehash.svg)](https://packagist.org/packages/jenssegers/imagehash) [![Build Status](http://img.shields.io/travis/jenssegers/imagehash.svg)](https://travis-ci.org/jenssegers/imagehash) [![Coverage Status](http://img.shields.io/coveralls/jenssegers/imagehash.svg)](https://coveralls.io/r/jenssegers/imagehash) [![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://www.paypal.me/jenssegers)
 
 > A perceptual hash is a fingerprint of a multimedia file derived from various features from its content. Unlike cryptographic hash functions which rely on the avalanche effect of small changes in input leading to drastic changes in the output, perceptual hashes are "close" to one another if the features are similar.
 
@@ -103,3 +103,33 @@ These images are different:
 	Image 1 hash: 69684858535b7575 (0010100010101000101010001010100010101011001010110101011100110111)
 	Image 2 hash: e1e1e2a7bbaf6faf (0111000011110000111100101101001101011011011101010011010101001111)
 	Hamming distance: 32
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/jenssegers/imagehash/graphs/contributors"><img src="https://opencollective.com/imagehash/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/imagehash/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/imagehash"><img src="https://opencollective.com/imagehash/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/imagehash/contribute)]
+
+<a href="https://opencollective.com/imagehash/organization/0/website"><img src="https://opencollective.com/imagehash/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/1/website"><img src="https://opencollective.com/imagehash/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/2/website"><img src="https://opencollective.com/imagehash/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/3/website"><img src="https://opencollective.com/imagehash/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/4/website"><img src="https://opencollective.com/imagehash/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/5/website"><img src="https://opencollective.com/imagehash/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/6/website"><img src="https://opencollective.com/imagehash/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/7/website"><img src="https://opencollective.com/imagehash/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/8/website"><img src="https://opencollective.com/imagehash/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/imagehash/organization/9/website"><img src="https://opencollective.com/imagehash/organization/9/avatar.svg"></a>
