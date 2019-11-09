@@ -31,7 +31,6 @@ class ImageHash
 
     /**
      * Calculate a perceptual hash of an image.
-     *
      * @param mixed $image
      * @return Hash
      */
@@ -44,7 +43,6 @@ class ImageHash
 
     /**
      * Compare 2 images and get the hamming distance.
-     *
      * @param mixed $resource1
      * @param mixed $resource2
      * @return int
@@ -59,7 +57,6 @@ class ImageHash
 
     /**
      * Calculate the Hamming Distance between 2 hashes.
-     *
      * @param Hash $hash1
      * @param Hash $hash2
      * @return int

@@ -94,7 +94,6 @@ class PerceptualHash implements Implementation
 
     /**
      * Perform a 1 dimension Discrete Cosine Transformation.
-     *
      * @param array $matrix
      * @return array
      */
@@ -120,7 +119,6 @@ class PerceptualHash implements Implementation
 
     /**
      * Get the median of the pixel values.
-     *
      * @param array $pixels
      * @return float
      */

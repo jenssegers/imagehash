@@ -212,7 +212,6 @@ class BlockHash implements Implementation
 
     /**
      * Get the median of the pixel values.
-     *
      * @param array $pixels
      * @return float
      */

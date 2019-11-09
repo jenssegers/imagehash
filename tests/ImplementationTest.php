@@ -11,11 +11,6 @@ use PHPUnit\Framework\TestCase;
 class ImplementationTest extends TestCase
 {
     /**
-     * @var Implementation[]
-     */
-    private $implementations;
-
-    /**
      * @var int
      */
     private $threshold = 10;
