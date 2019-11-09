@@ -20,7 +20,7 @@ This code was inspired/based on:
 Requirements
 ------------
 
- - PHP 5.6 or higher
+ - PHP 7.1 or higher
  - The [gd](http://php.net/manual/en/book.image.php) or [imagick](http://php.net/manual/en/book.imagick.php) extension
  - Optionally, install the [GMP](http://php.net/manual/en/book.gmp.php) extension for faster fingerprint comparisons
 
