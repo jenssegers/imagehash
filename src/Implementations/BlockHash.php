@@ -29,11 +29,7 @@ class BlockHash implements Implementation
      */
     protected $size;
 
-    /**
-     * @param string $mode
-     * @param int $size
-     */
-    public function __construct($size = 16, $mode = self::PRECISE)
+    public function __construct(int $size = 16, $mode = self::PRECISE)
     {
         if ($size % 4 !== 0) {
             throw new InvalidArgumentException('Amount of bits needs to be dividable by 4');
@@ -47,10 +43,7 @@ class BlockHash implements Implementation
         $this->mode = $mode;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function hash(Image $image)
+    public function hash(Image $image): Hash
     {
         if ($this->mode === self::QUICK) {
             return $this->even($image);
@@ -59,11 +52,7 @@ class BlockHash implements Implementation
         return $this->uneven($image);
     }
 
-    /**
-     * @param Image $image
-     * @return Hash
-     */
-    private function even(Image $image)
+    private function even(Image $image): Hash
     {
         $width = $image->getWidth();
         $height = $image->getHeight();
@@ -92,11 +81,7 @@ class BlockHash implements Implementation
         return $this->blocksToBits($result, $blocksizeX * $blocksizeY);
     }
 
-    /**
-     * @param Image $image
-     * @return Hash
-     */
-    private function uneven(Image $image)
+    private function uneven(Image $image): Hash
     {
         $imageWidth = $image->getWidth();
         $imageHeight = $image->getHeight();
@@ -177,12 +162,7 @@ class BlockHash implements Implementation
         return $this->blocksToBits($result, $blockWidth * $blockHeight);
     }
 
-    /**
-     * @param array $blocks
-     * @param int|float $pixelsPerBlock
-     * @return Hash
-     */
-    protected function blocksToBits(array $blocks, $pixelsPerBlock)
+    protected function blocksToBits(array $blocks, float $pixelsPerBlock): Hash
     {
         $halfBlockValue = $pixelsPerBlock * 256 * 3 / 2;
 
@@ -212,10 +192,8 @@ class BlockHash implements Implementation
 
     /**
      * Get the median of the pixel values.
-     * @param array $pixels
-     * @return float
      */
-    protected function median(array $pixels)
+    protected function median(array $pixels): float
     {
         sort($pixels, SORT_NUMERIC);
 

@@ -12,19 +12,12 @@ class Hash implements JsonSerializable
      */
     protected $value;
 
-    /**
-     * @param BigInteger $value
-     */
     private function __construct(BigInteger $value)
     {
         $this->value = $value;
     }
 
-    /**
-     * @param string $hex
-     * @return self
-     */
-    public static function fromHex($hex)
+    public static function fromHex(string $hex): self
     {
         return new self(new BigInteger($hex, 16));
     }
@@ -33,7 +26,7 @@ class Hash implements JsonSerializable
      * @param string|array $bits
      * @return self
      */
-    public static function fromBits($bits)
+    public static function fromBits($bits): self
     {
         if (is_array($bits)) {
             $bits = implode('', $bits);
@@ -42,52 +35,32 @@ class Hash implements JsonSerializable
         return new self(new BigInteger($bits, 2));
     }
 
-    /**
-     * @param int $int
-     * @return self
-     */
-    public static function fromInt($int)
+    public static function fromInt(int $int): self
     {
         return new self(new BigInteger($int, 10));
     }
 
-    /**
-     * @return string
-     */
-    public function toHex()
+    public function toHex(): string
     {
         return $this->value->toHex();
     }
 
-    /**
-     * @return string
-     */
-    public function toBytes()
+    public function toBytes(): string
     {
         return $this->value->toBytes();
     }
 
-    /**
-     * @return string
-     */
-    public function toBits()
+    public function toBits(): string
     {
         return $this->value->toBits();
     }
 
-    /**
-     * @return int
-     */
-    public function toInt()
+    public function toInt(): int
     {
         return hexdec($this->toHex());
     }
 
-    /**
-     * @param Hash $hash
-     * @return int
-     */
-    public function distance(Hash $hash)
+    public function distance(Hash $hash): int
     {
         if (extension_loaded('gmp')) {
             return gmp_hamdist('0x' . $this->toHex(), '0x' . $hash->toHex());
@@ -104,27 +77,17 @@ class Hash implements JsonSerializable
         return count(array_diff_assoc(str_split($bits1), str_split($bits2)));
     }
 
-    /**
-     * @param Hash $hash
-     * @return bool
-     */
-    public function equals(Hash $hash)
+    public function equals(Hash $hash): bool
     {
         return $this->toHex() === $hash->toHex();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toHex();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): string
     {
         return (string) $this;
     }

@@ -11,18 +11,12 @@ class AverageHash implements Implementation
      */
     protected $size;
 
-    /**
-     * @param int $size
-     */
-    public function __construct($size = 8)
+    public function __construct(int $size = 8)
     {
         $this->size = $size;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function hash(Image $image)
+    public function hash(Image $image): Hash
     {
         // Resize the image.
         $resized = $image->resize($this->size, $this->size);

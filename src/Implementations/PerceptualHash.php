@@ -27,11 +27,7 @@ class PerceptualHash implements Implementation
      */
     protected $comparisonMethod;
 
-    /**
-     * @param int $size
-     * @param string $comparisonMethod
-     */
-    public function __construct($size = 32, $comparisonMethod = self::AVERAGE)
+    public function __construct(int $size = 32, string $comparisonMethod = self::AVERAGE)
     {
         if (!in_array($comparisonMethod, [self::AVERAGE, self::MEDIAN])) {
             throw new InvalidArgumentException('Unknown comparison mode ' . $comparisonMethod);
@@ -41,10 +37,7 @@ class PerceptualHash implements Implementation
         $this->comparisonMethod = $comparisonMethod;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function hash(Image $image)
+    public function hash(Image $image): Hash
     {
         // Resize the image.
         $resized = $image->resize($this->size, $this->size);
@@ -94,10 +87,8 @@ class PerceptualHash implements Implementation
 
     /**
      * Perform a 1 dimension Discrete Cosine Transformation.
-     * @param array $matrix
-     * @return array
      */
-    protected function calculateDCT(array $matrix)
+    protected function calculateDCT(array $matrix): array
     {
         $transformed = [];
         $size = count($matrix);
@@ -119,10 +110,8 @@ class PerceptualHash implements Implementation
 
     /**
      * Get the median of the pixel values.
-     * @param array $pixels
-     * @return float
      */
-    protected function median(array $pixels)
+    protected function median(array $pixels): float
     {
         sort($pixels, SORT_NUMERIC);
 
@@ -134,10 +123,9 @@ class PerceptualHash implements Implementation
     }
 
     /**
-     * @param array $pixels
-     * @return float
+     * Get the average of the pixel values.
      */
-    protected function average(array $pixels)
+    protected function average(array $pixels): float
     {
         // Calculate the average value from top 8x8 pixels, except for the first one.
         $n = count($pixels) - 1;

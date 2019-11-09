@@ -17,10 +17,6 @@ class ImageHash
      */
     private $driver;
 
-    /**
-     * @param Implementation $implementation
-     * @param ImageManager $driver
-     */
     public function __construct(
         Implementation $implementation = null,
         ImageManager $driver = null
@@ -34,7 +30,7 @@ class ImageHash
      * @param mixed $image
      * @return Hash
      */
-    public function hash($image)
+    public function hash($image): Hash
     {
         $image = $this->driver->make($image);
 
@@ -47,7 +43,7 @@ class ImageHash
      * @param mixed $resource2
      * @return int
      */
-    public function compare($resource1, $resource2)
+    public function compare($resource1, $resource2): int
     {
         $hash1 = $this->hash($resource1);
         $hash2 = $this->hash($resource2);
@@ -55,39 +51,22 @@ class ImageHash
         return $this->distance($hash1, $hash2);
     }
 
-    /**
-     * Calculate the Hamming Distance between 2 hashes.
-     * @param Hash $hash1
-     * @param Hash $hash2
-     * @return int
-     */
-    public function distance(Hash $hash1, Hash $hash2)
+    public function distance(Hash $hash1, Hash $hash2): int
     {
         return $hash1->distance($hash2);
     }
 
-    /**
-     * @param string $data
-     * @return Image
-     */
-    protected function createResource($data)
+    protected function createResource(string $data): Image
     {
         return $this->driver->make($data);
     }
 
-    /**
-     * @return Implementation
-     */
-    protected function defaultImplementation()
+    protected function defaultImplementation(): Implementation
     {
         return new DifferenceHash();
     }
 
-    /**
-     * @return ImageManager
-     * @throws RuntimeException
-     */
-    protected function defaultDriver()
+    protected function defaultDriver(): ImageManager
     {
         if (extension_loaded('gd')) {
             return new ImageManager(['driver' => 'gd']);
