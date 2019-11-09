@@ -1,4 +1,8 @@
-FROM php:7.2-cli
+ARG PHP_VERSION=7.2
+ARG COMPOSER_VERSION=1.8
+
+FROM composer:${COMPOSER_VERSION}
+FROM php:${PHP_VERSION}-cli
 
 RUN apt-get update && \
     apt-get install libmagickwand-dev --no-install-recommends -qy && \
