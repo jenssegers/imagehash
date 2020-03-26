@@ -1,4 +1,4 @@
 # These are supported funding model platforms
 
 github: jenssegers
-open_collective: imagehash
+tidelift: "packagist/jenssegers/imagehash"
