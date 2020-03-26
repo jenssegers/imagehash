@@ -103,3 +103,7 @@ These images are different:
 	Image 1 hash: 69684858535b7575 (0010100010101000101010001010100010101011001010110101011100110111)
 	Image 2 hash: e1e1e2a7bbaf6faf (0111000011110000111100101101001101011011011101010011010101001111)
 	Hamming distance: 32
+
+## Security contact information
+
+To report a security vulnerability, follow [these steps](https://tidelift.com/security).
