@@ -128,7 +128,7 @@ final class PerceptualHash2 implements Implementation
         // Calculate hash.
         $bits = [];
         foreach ($pixels as $pixel) {
-            $bits[] = (int)($pixel > $compare);
+            $bits[] = (int) ($pixel > $compare);
         }
 
         return Hash::fromBits($bits);
