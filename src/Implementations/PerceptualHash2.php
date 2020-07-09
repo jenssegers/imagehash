@@ -9,7 +9,7 @@ use Jenssegers\ImageHash\Implementation;
 use LogicException;
 
 /**
- * This is an optimised version of the original {@see PerceptualHash}
+ * This is an optimized version of the original {@see PerceptualHash}
  * based on some R&D. You can read more at the issue page.
  *
  * @see https://github.com/jenssegers/imagehash/issues/52
