@@ -68,12 +68,12 @@ class ImageHash
 
     protected function defaultDriver(): ImageManager
     {
-        if (extension_loaded('gd')) {
-            return new ImageManager(['driver' => 'gd']);
-        }
-
         if (extension_loaded('imagick')) {
             return new ImageManager(['driver' => 'imagick']);
+        }
+        
+        if (extension_loaded('gd')) {
+            return new ImageManager(['driver' => 'gd']);
         }
 
         throw new RuntimeException('Please install GD or ImageMagick');
