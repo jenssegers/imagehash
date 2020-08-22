@@ -73,7 +73,7 @@ The `Hash` object can return the internal binary hash in a couple of different f
 echo $hash->toHex(); // 7878787c7c707c3c
 echo $hash->toBin(); // 0111100001111000011110000111110001111100011100000111110000111100
 echo $hash->toInt(); // 8680820757815655484
-echo $hash->toBytes(); // b"\x0F\x07ƒƒ\x03\x0F\x07\x00"
+echo $hash->toBytes(); // "\x0F\x07ƒƒ\x03\x0F\x07\x00"
 ```
 
 Choose your preference for storing your hashes in your database. If you want to reconstruct a `Hash` object from a previous calculated value, use:
