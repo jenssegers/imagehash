@@ -54,8 +54,13 @@ class Hash implements JsonSerializable
     {
         return $this->value->toBits();
     }
-
+    /** @deprecated use Hash::toFloat() instead */
     public function toInt(): int
+    {
+        return hexdec($this->toHex());
+    }
+
+    public function toFloat(): float
     {
         return hexdec($this->toHex());
     }
