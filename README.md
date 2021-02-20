@@ -38,10 +38,10 @@ Usage
 
 The library comes with 4 built-in hashing implementations:
 
- - `Jenssegers\ImageHash\Implementation\AverageHash` - Hash based the average image color
- - `Jenssegers\ImageHash\Implementation\DifferenceHash` - Hash based on the previous pixel
-  - `Jenssegers\ImageHash\Implementation\BlockHash` - Hash based on blockhash.io **Still under development**
- - `Jenssegers\ImageHash\Implementation\PerceptualHash` - The original pHash **Still under development**
+ - `Jenssegers\ImageHash\Implementations\AverageHash` - Hash based the average image color
+ - `Jenssegers\ImageHash\Implementations\DifferenceHash` - Hash based on the previous pixel
+ - `Jenssegers\ImageHash\Implementations\BlockHash` - Hash based on blockhash.io **Still under development**
+ - `Jenssegers\ImageHash\Implementations\PerceptualHash` - The original pHash **Still under development**
 
 Choose one of these implementations. If you don't know which one to use, try the `DifferenceHash` implementation. Some implementations allow some configuration, be sure to check the constructor.
 
