@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": ">=7.0",
         "intervention/image": "^2.4",
         "phpseclib/phpseclib": "^2.0"
     },
