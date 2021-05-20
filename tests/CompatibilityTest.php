@@ -1,5 +1,6 @@
 <?php
 
+use Intervention\Image\ImageManager;
 use Jenssegers\ImageHash\ImageHash;
 use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
@@ -89,12 +90,19 @@ class CompatibilityTest extends TestCase
     public function testCompatibility($implementation, $path, $precalculated)
     {
         $implementation = new $implementation();
-        $hasher = new ImageHash($implementation);
+        foreach (['gd', 'imagick'] as $driver) {
+            if (!extension_loaded($driver)) {
+                $this->addWarning("Extension $driver isn't loaded!");
+                continue;
+            }
 
-        $hash = $hasher->hash($path);
+            $hasher = new ImageHash($implementation, new ImageManager(['driver' => $driver]));
 
-        if ($precalculated !== $hash->toHex()) {
-            $this->addWarning(get_class($implementation) . ' generated a different hash ' . $hash->toHex() . ' instead of ' . $precalculated);
+            $hash = $hasher->hash($path);
+
+            if ($precalculated !== $hash->toHex()) {
+                $this->addWarning(\get_class($implementation)." $driver generated a different hash ".$hash->toHex().' instead of '.$precalculated);
+            }
         }
 
         $this->expectNotToPerformAssertions();

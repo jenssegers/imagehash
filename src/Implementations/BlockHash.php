@@ -145,6 +145,10 @@ class BlockHash implements Implementation
                 }
 
                 // Add weighted pixel value to relevant blocks.
+                $blocks[$blockTop][$blockLeft] ??= 0;
+                $blocks[$blockTop][$blockRight] ??= 0;
+                $blocks[$blockBottom][$blockLeft] ??= 0;
+                $blocks[$blockBottom][$blockRight] ??= 0;
                 $blocks[$blockTop][$blockLeft] += $value * $weightTop * $weightLeft;
                 $blocks[$blockTop][$blockRight] += $value * $weightTop * $weightRight;
                 $blocks[$blockBottom][$blockLeft] += $value * $weightBottom * $weightLeft;
