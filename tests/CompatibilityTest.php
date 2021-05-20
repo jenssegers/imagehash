@@ -92,7 +92,6 @@ class CompatibilityTest extends TestCase
         $implementation = new $implementation();
         foreach (['gd', 'imagick'] as $driver) {
             if (!extension_loaded($driver)) {
-                $this->addWarning("Extension $driver isn't loaded!");
                 continue;
             }
 
