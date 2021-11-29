@@ -3,7 +3,7 @@
 namespace Jenssegers\ImageHash;
 
 use JsonSerializable;
-use phpseclib\Math\BigInteger;
+use phpseclib3\Math\BigInteger;
 
 class Hash implements JsonSerializable
 {
