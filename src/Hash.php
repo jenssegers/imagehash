@@ -63,7 +63,7 @@ class Hash implements JsonSerializable
     public function distance(Hash $hash): int
     {
         if (extension_loaded('gmp')) {
-            return gmp_hamdist('0x' . $this->toHex(), '0x' . $hash->toHex());
+            return gmp_hamdist(gmp_init('0x' . $this->toHex()), gmp_init('0x' . $hash->toHex()));
         }
 
         $bits1 = $this->toBits();
