@@ -6,6 +6,7 @@ use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\BlockHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
+use Jenssegers\ImageHash\Implementations\PerceptualHash2;
 use PHPUnit\Framework\TestCase;
 
 class ImplementationTest extends TestCase
@@ -27,6 +28,9 @@ class ImplementationTest extends TestCase
             [new DifferenceHash()],
             [new PerceptualHash(32, PerceptualHash::AVERAGE)],
             [new PerceptualHash(32, PerceptualHash::MEDIAN)],
+            [new PerceptualHash2(16)],
+            [new PerceptualHash2(32)],
+            [new PerceptualHash2(64)],
             [new BlockHash(8, BlockHash::QUICK)],
             [new BlockHash(8, BlockHash::PRECISE)],
         ];
