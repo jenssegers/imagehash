@@ -14,12 +14,12 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.1|^8.0",
         "intervention/image": "^2.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0|^7.0",
-        "satooshi/php-coveralls": "^2.0"
+        "phpunit/phpunit": "^7|^8|^9",
+        "php-coveralls/php-coveralls": "^2.0"
     },
     "suggest": {
         "ext-gmp": "GMP results in faster comparisons",

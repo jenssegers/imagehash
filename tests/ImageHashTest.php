@@ -11,7 +11,7 @@ class ImageHashTest extends TestCase
      */
     private $imageHash;
 
-    public function setup()
+    public function setup(): void
     {
         $this->imageHash = new ImageHash();
     }

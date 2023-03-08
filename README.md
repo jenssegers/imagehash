@@ -38,10 +38,10 @@ Usage
 
 The library comes with 4 built-in hashing implementations:
 
- - `Jenssegers\ImageHash\Implementation\AverageHash` - Hash based the average image color
- - `Jenssegers\ImageHash\Implementation\DifferenceHash` - Hash based on the previous pixel
-  - `Jenssegers\ImageHash\Implementation\BlockHash` - Hash based on blockhash.io **Still under development**
- - `Jenssegers\ImageHash\Implementation\PerceptualHash` - The original pHash **Still under development**
+ - `Jenssegers\ImageHash\Implementations\AverageHash` - Hash based the average image color
+ - `Jenssegers\ImageHash\Implementations\DifferenceHash` - Hash based on the previous pixel
+ - `Jenssegers\ImageHash\Implementations\BlockHash` - Hash based on blockhash.io **Still under development**
+ - `Jenssegers\ImageHash\Implementations\PerceptualHash` - The original pHash **Still under development**
 
 Choose one of these implementations. If you don't know which one to use, try the `DifferenceHash` implementation. Some implementations allow some configuration, be sure to check the constructor.
 
@@ -71,7 +71,7 @@ The `Hash` object can return the internal binary hash in a couple of different f
 
 ```php
 echo $hash->toHex(); // 7878787c7c707c3c
-echo $hash->toBin(); // 0111100001111000011110000111110001111100011100000111110000111100
+echo $hash->toBits(); // 0111100001111000011110000111110001111100011100000111110000111100
 echo $hash->toInt(); // 8680820757815655484
 echo $hash->toBytes(); // "\x0F\x07ƒƒ\x03\x0F\x07\x00"
 ```
