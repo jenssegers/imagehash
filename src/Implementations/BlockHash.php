@@ -19,15 +19,9 @@ class BlockHash implements Implementation
      */
     const QUICK = 'quick';
 
-    /**
-     * @var string
-     */
-    protected $mode;
+    protected string $mode;
 
-    /**
-     * @var int
-     */
-    protected $size;
+    protected int $size;
 
     public function __construct(int $size = 16, $mode = self::PRECISE)
     {
@@ -54,8 +48,8 @@ class BlockHash implements Implementation
 
     private function even(Image $image): Hash
     {
-        $width = $image->getWidth();
-        $height = $image->getHeight();
+        $width = $image->width();
+        $height = $image->height();
         $blocksizeX = (int) floor($width / $this->size);
         $blocksizeY = (int) floor($height / $this->size);
 
@@ -69,7 +63,7 @@ class BlockHash implements Implementation
                     for ($ix = 0; $ix < $blocksizeX; $ix++) {
                         $cx = $x * $blocksizeX + $ix;
                         $cy = $y * $blocksizeY + $iy;
-                        $rgb = $image->pickColor($cx, $cy);
+                        $rgb = $image->pickColor($cx, $cy)->toArray();
                         $value += $rgb[0] + $rgb[1] + $rgb[2];
                     }
                 }
@@ -83,8 +77,8 @@ class BlockHash implements Implementation
 
     private function uneven(Image $image): Hash
     {
-        $imageWidth = $image->getWidth();
-        $imageHeight = $image->getHeight();
+        $imageWidth = $image->width();
+        $imageHeight = $image->height();
         $evenX = $imageWidth % $this->size === 0;
         $evenY = $imageHeight % $this->size === 0;
         $blockWidth = $imageWidth / $this->size;
@@ -103,7 +97,7 @@ class BlockHash implements Implementation
                 $weightTop = 1;
                 $weightBottom = 0;
             } else {
-                $yMod = ($y + 1) % $blockHeight;
+                $yMod = fmod($y + 1, $blockHeight);
                 $yFrac = $yMod - (int) floor($yMod);
                 $yInt = $yMod - $yFrac;
 
@@ -120,7 +114,7 @@ class BlockHash implements Implementation
             }
 
             for ($x = 0; $x < $imageWidth; $x++) {
-                $rgb = $image->pickColor($x, $y);
+                $rgb = $image->pickColor($x, $y)->toArray();
                 $value = $rgb[0] + $rgb[1] + $rgb[2];
 
                 if ($evenX) {
@@ -128,7 +122,7 @@ class BlockHash implements Implementation
                     $weightLeft = 1;
                     $weightRight = 0;
                 } else {
-                    $xMod = ($x + 1) % $blockWidth;
+                    $xMod = fmod($x + 1, $blockWidth);
                     $xFrac = $xMod - (int) floor($xMod);
                     $xInt = $xMod - $xFrac;
 
