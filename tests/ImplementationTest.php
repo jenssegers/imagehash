@@ -6,22 +6,17 @@ use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\BlockHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Jenssegers\ImageHash\Implementations\PerceptualHash;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ImplementationTest extends TestCase
 {
-    /**
-     * @var int
-     */
-    private $threshold = 10;
+    private int $threshold = 10;
 
-    /**
-     * @var bool
-     */
-    private $debug = true;
+    private bool $debug = true;
 
-    public function provideImplementations()
-    {
+    public static function provideImplementations(): array
+	{
         return [
             [new AverageHash()],
             [new DifferenceHash()],
@@ -32,26 +27,17 @@ class ImplementationTest extends TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    protected function getSimilarImages()
-    {
+    protected function getSimilarImages(): array
+	{
         return glob(__DIR__ . '/images/forest/*');
     }
 
-    /**
-     * @return array
-     */
-    protected function getDifferentImages()
-    {
+    protected function getDifferentImages(): array
+	{
         return glob(__DIR__ . '/images/office/*');
     }
 
-    /**
-     * @dataProvider provideImplementations
-     * @param Implementation $implementation
-     */
+	#[DataProvider('provideImplementations')]
     public function testEqualHashes(Implementation $implementation)
     {
         $sum = 0;
@@ -81,10 +67,7 @@ class ImplementationTest extends TestCase
         $this->debug("[" . get_class($implementation) . "] Total score: $sum");
     }
 
-    /**
-     * @dataProvider provideImplementations
-     * @param Implementation $implementation
-     */
+	#[DataProvider('provideImplementations')]
     public function testDifferentHashes(Implementation $implementation)
     {
         $sum = 0;
@@ -114,8 +97,7 @@ class ImplementationTest extends TestCase
         $this->debug("[" . get_class($implementation) . "] Total score: $sum");
     }
 
-    protected function debug($message)
-    {
+    protected function debug(string $message): void {
         if ($this->debug) {
             echo PHP_EOL . $message;
         }

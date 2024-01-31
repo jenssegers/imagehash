@@ -7,18 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ["7.1", "7.2", "7.3", "7.4", "8.0"]
-        extensions: ["gd", "imagick"]
-    name: PHP ${{ matrix.php-versions }} - ${{ matrix.extensions }}
+        php-version: ["8.1", "8.2", "8.3"]
+        extension: ["gd, :imagick", "imagick, :gd"] # the ':" prefix is used to unload the other extension
+    name: PHP ${{ matrix.php-version }} - ${{ matrix.extension }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: ${{ matrix.extensions }}
+          php-version: ${{ matrix.php-version }}
+          extensions: ${{ matrix.extension }}
           coverage: xdebug
 
       - name: Check environment
@@ -27,15 +27,15 @@ jobs:
           composer --version
 
       - name: Get composer cache directory
-        id: composercache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ matrix.os }}-composer-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ matrix.os }}-composer-${{ matrix.php-versions }}-
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ matrix.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ matrix.os }}-composer-${{ matrix.php-version }}-
 
       - name: Install dependencies
         run: composer install --prefer-dist
@@ -49,8 +49,8 @@ jobs:
       - name: Upload coverage to Codecov
         env: 
           OS: ${{ matrix.os }}
-          PHP: ${{ matrix.php-versions }}
-        uses: codecov/codecov-action@v1
+          PHP: ${{ matrix.php-version }}
+        uses: codecov/codecov-action@v3
         with:
            file: build/logs/clover.xml
            env_vars: OS,PHP

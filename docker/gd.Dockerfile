@@ -1,8 +1,10 @@
-ARG PHP_VERSION=7.2
-ARG COMPOSER_VERSION=1.8
+ARG PHP_VERSION=8.1
+ARG COMPOSER_VERSION=2
 
-FROM composer:${COMPOSER_VERSION}
+FROM composer:${COMPOSER_VERSION} as composer
 FROM php:${PHP_VERSION}-cli
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update && \
     apt-get install libpng-dev libjpeg-dev --no-install-recommends -qy && \

@@ -1,15 +1,18 @@
 <?php
 
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\ImageManager;
 use Jenssegers\ImageHash\ImageHash;
 use Jenssegers\ImageHash\Implementations\AverageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CompatibilityTest extends TestCase
 {
-    public function preCalculatedImageHashes()
-    {
+    public static function preCalculatedImageHashes(): array
+	{
         return [
             [
                 AverageHash::class,
@@ -84,26 +87,30 @@ class CompatibilityTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider preCalculatedImageHashes
-     */
+	#[DataProvider('preCalculatedImageHashes')]
     public function testCompatibility($implementation, $path, $precalculated)
     {
         $implementation = new $implementation();
-        foreach (['gd', 'imagick'] as $driver) {
-            if (!extension_loaded($driver)) {
+        foreach (['gd' => fn() => new GdDriver(), 'imagick' => fn() => new ImagickDriver()] as $extension => $driver) {
+            if (!extension_loaded($extension)) {
                 continue;
             }
 
-            $hasher = new ImageHash($implementation, new ImageManager(['driver' => $driver]));
+            $hasher = new ImageHash($implementation, new ImageManager($driver()));
 
             $hash = $hasher->hash($path);
+			$hex = $hash->toHex();
 
-            if ($precalculated !== $hash->toHex()) {
-                $this->addWarning(\get_class($implementation)." $driver generated a different hash ".$hash->toHex().' instead of '.$precalculated);
+            if ($precalculated !== $hex) {
+                $this->addWarning(get_class($implementation)." $extension generated a different hash ".$hex.' instead of '.$precalculated);
             }
         }
 
         $this->expectNotToPerformAssertions();
     }
+
+	private function addWarning(string $message): void
+	{
+		trigger_error($message,  E_USER_WARNING);
+	}
 }

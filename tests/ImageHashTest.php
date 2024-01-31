@@ -1,15 +1,12 @@
 <?php
 
-use Intervention\Image\Exception\NotReadableException;
+use Intervention\Image\Exceptions\DecoderException;
 use Jenssegers\ImageHash\ImageHash;
 use PHPUnit\Framework\TestCase;
 
 class ImageHashTest extends TestCase
 {
-    /**
-     * @var ImageHash
-     */
-    private $imageHash;
+    private ImageHash $imageHash;
 
     public function setup(): void
     {
@@ -18,7 +15,7 @@ class ImageHashTest extends TestCase
 
     public function testHashInvalidFile()
     {
-        $this->expectException(NotReadableException::class);
+        $this->expectException(DecoderException::class);
 
         $this->imageHash->hash('nonImageString');
     }
