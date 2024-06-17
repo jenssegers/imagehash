@@ -6,10 +6,7 @@ use Jenssegers\ImageHash\Implementation;
 
 class AverageHash implements Implementation
 {
-    /**
-     * @var int
-     */
-    protected $size;
+    protected int $size;
 
     public function __construct(int $size = 8)
     {
@@ -25,7 +22,7 @@ class AverageHash implements Implementation
         $pixels = [];
         for ($y = 0; $y < $this->size; $y++) {
             for ($x = 0; $x < $this->size; $x++) {
-                $rgb = $resized->pickColor($x, $y);
+                $rgb = $resized->pickColor($x, $y)->toArray();
                 $pixels[] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
             }
         }

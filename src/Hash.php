@@ -11,14 +11,14 @@ class Hash implements JsonSerializable
      *
      * @var string
      */
-    protected $binaryValue;
+    protected string $binaryValue;
 
     /**
      * Hash will be split in several integers if longer than PHP_INT_SIZE
      *
      * @var int[]|null
      */
-    protected $integers = null;
+    protected ?array $integers = null;
 
     /**
      * @param string $binaryValue
@@ -35,7 +35,7 @@ class Hash implements JsonSerializable
      *
      * @return self
      */
-    public static function fromBits($bits): self
+    public static function fromBits(array|string $bits): self
     {
         if (\is_array($bits)) {
             $bits = implode('', $bits);

@@ -1,5 +1,7 @@
 <?php namespace Jenssegers\ImageHash;
 
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
@@ -7,15 +9,9 @@ use RuntimeException;
 
 class ImageHash
 {
-    /**
-     * @var Implementation
-     */
-    protected $implementation;
+    protected Implementation $implementation;
 
-    /**
-     * @var Image
-     */
-    private $driver;
+    private ImageManager $driver;
 
     public function __construct(
         Implementation $implementation = null,
@@ -30,9 +26,9 @@ class ImageHash
      * @param mixed $image
      * @return Hash
      */
-    public function hash($image): Hash
+    public function hash(mixed $image): Hash
     {
-        $image = $this->driver->make($image);
+        $image = $this->driver->read($image);
 
         return $this->implementation->hash($image);
     }
@@ -43,7 +39,7 @@ class ImageHash
      * @param mixed $resource2
      * @return int
      */
-    public function compare($resource1, $resource2): int
+    public function compare(mixed $resource1, mixed $resource2): int
     {
         $hash1 = $this->hash($resource1);
         $hash2 = $this->hash($resource2);
@@ -58,7 +54,7 @@ class ImageHash
 
     protected function createResource(string $data): Image
     {
-        return $this->driver->make($data);
+        return $this->driver->read($data);
     }
 
     protected function defaultImplementation(): Implementation
@@ -69,11 +65,11 @@ class ImageHash
     protected function defaultDriver(): ImageManager
     {
         if (extension_loaded('imagick')) {
-            return new ImageManager(['driver' => 'imagick']);
+            return new ImageManager(new ImagickDriver());
         }
-        
+
         if (extension_loaded('gd')) {
-            return new ImageManager(['driver' => 'gd']);
+            return new ImageManager(new GdDriver());
         }
 
         throw new RuntimeException('Please install GD or ImageMagick');
