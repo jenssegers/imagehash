@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.2", "8.3", "8.4"]
+        php-version: ["8.3", "8.4"]
         extension: ["gd, :imagick", "imagick, :gd"] # the ':" prefix is used to unload the other extension
     name: PHP ${{ matrix.php-version }} - ${{ matrix.extension }}
     steps:

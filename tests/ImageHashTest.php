@@ -1,6 +1,6 @@
 <?php
 
-use Intervention\Image\Exceptions\DecoderException;
+use Intervention\Image\Exceptions\RuntimeException;
 use Jenssegers\ImageHash\ImageHash;
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +15,7 @@ class ImageHashTest extends TestCase
 
     public function testHashInvalidFile()
     {
-        $this->expectException(DecoderException::class);
+        $this->expectException(RuntimeException::class);
 
         $this->imageHash->hash('nonImageString');
     }

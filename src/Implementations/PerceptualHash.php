@@ -1,9 +1,10 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
-use Intervention\Image\Image;
+use Intervention\Image\Interfaces\ImageInterface;
 use InvalidArgumentException;
 use Jenssegers\ImageHash\Hash;
 use Jenssegers\ImageHash\Implementation;
+use Jenssegers\ImageHash\RgbArrayAnalyzer;
 
 class PerceptualHash implements Implementation
 {
@@ -31,7 +32,7 @@ class PerceptualHash implements Implementation
         $this->comparisonMethod = $comparisonMethod;
     }
 
-    public function hash(Image $image): Hash
+    public function hash(ImageInterface $image): Hash
     {
         // Resize the image.
         $resized = $image->resize($this->size, $this->size);
@@ -43,7 +44,7 @@ class PerceptualHash implements Implementation
 
         for ($y = 0; $y < $this->size; $y++) {
             for ($x = 0; $x < $this->size; $x++) {
-                $rgb = $resized->pickColor($x, $y)->toArray();
+                $rgb = $resized->analyze(new RgbArrayAnalyzer($x, $y));
                 $row[$x] = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
             }
             $rows[$y] = $this->calculateDCT($row);

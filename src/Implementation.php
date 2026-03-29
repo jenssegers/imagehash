@@ -1,8 +1,8 @@
 <?php namespace Jenssegers\ImageHash;
 
-use Intervention\Image\Image;
+use Intervention\Image\Interfaces\ImageInterface;
 
 interface Implementation
 {
-    public function hash(Image $image): Hash;
+    public function hash(ImageInterface $image): Hash;
 }

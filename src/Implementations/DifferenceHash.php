@@ -1,8 +1,9 @@
 <?php namespace Jenssegers\ImageHash\Implementations;
 
-use Intervention\Image\Image;
+use Intervention\Image\Interfaces\ImageInterface;
 use Jenssegers\ImageHash\Hash;
 use Jenssegers\ImageHash\Implementation;
+use Jenssegers\ImageHash\RgbArrayAnalyzer;
 
 class DifferenceHash implements Implementation
 {
@@ -13,7 +14,7 @@ class DifferenceHash implements Implementation
         $this->size = $size;
     }
 
-    public function hash(Image $image): Hash
+    public function hash(ImageInterface $image): Hash
     {
         // For this implementation we create a 8x9 image.
         $width = $this->size + 1;
@@ -25,12 +26,12 @@ class DifferenceHash implements Implementation
         $bits = [];
         for ($y = 0; $y < $height; $y++) {
             // Get the pixel value for the leftmost pixel.
-            $rgb = $resized->pickColor(0, $y)->toArray();
+            $rgb = $resized->analyze(new RgbArrayAnalyzer(0, $y));
             $left = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
 
             for ($x = 1; $x < $width; $x++) {
                 // Get the pixel value for each pixel starting from position 1.
-                $rgb = $resized->pickColor($x, $y)->toArray();
+                $rgb = $resized->analyze(new RgbArrayAnalyzer($x, $y));
                 $right = (int) floor(($rgb[0] * 0.299) + ($rgb[1] * 0.587) + ($rgb[2] * 0.114));
 
                 // Each hash bit is set based on whether the left pixel is brighter than the right pixel.
