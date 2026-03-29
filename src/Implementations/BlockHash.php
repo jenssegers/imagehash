@@ -2,10 +2,11 @@
 
 namespace Jenssegers\ImageHash\Implementations;
 
-use Intervention\Image\Image;
+use Intervention\Image\Interfaces\ImageInterface;
 use InvalidArgumentException;
 use Jenssegers\ImageHash\Hash;
 use Jenssegers\ImageHash\Implementation;
+use Jenssegers\ImageHash\RgbArrayAnalyzer;
 
 class BlockHash implements Implementation
 {
@@ -37,7 +38,7 @@ class BlockHash implements Implementation
         $this->mode = $mode;
     }
 
-    public function hash(Image $image): Hash
+    public function hash(ImageInterface $image): Hash
     {
         if ($this->mode === self::QUICK) {
             return $this->even($image);
@@ -46,7 +47,7 @@ class BlockHash implements Implementation
         return $this->uneven($image);
     }
 
-    private function even(Image $image): Hash
+    private function even(ImageInterface $image): Hash
     {
         $width = $image->width();
         $height = $image->height();
@@ -63,7 +64,8 @@ class BlockHash implements Implementation
                     for ($ix = 0; $ix < $blocksizeX; $ix++) {
                         $cx = $x * $blocksizeX + $ix;
                         $cy = $y * $blocksizeY + $iy;
-                        $rgb = $image->pickColor($cx, $cy)->toArray();
+                        $rgb = $image->analyze(new RgbArrayAnalyzer($cx, $cy));
+
                         $value += $rgb[0] + $rgb[1] + $rgb[2];
                     }
                 }
@@ -75,7 +77,7 @@ class BlockHash implements Implementation
         return $this->blocksToBits($result, $blocksizeX * $blocksizeY);
     }
 
-    private function uneven(Image $image): Hash
+    private function uneven(ImageInterface $image): Hash
     {
         $imageWidth = $image->width();
         $imageHeight = $image->height();
@@ -114,7 +116,7 @@ class BlockHash implements Implementation
             }
 
             for ($x = 0; $x < $imageWidth; $x++) {
-                $rgb = $image->pickColor($x, $y)->toArray();
+                $rgb = $image->analyze(new RgbArrayAnalyzer($x, $y));
                 $value = $rgb[0] + $rgb[1] + $rgb[2];
 
                 if ($evenX) {

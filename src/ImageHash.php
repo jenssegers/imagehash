@@ -2,8 +2,9 @@
 
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
-use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Interfaces\ImageInterface;
+use Intervention\Image\Interfaces\ImageManagerInterface;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use RuntimeException;
 
@@ -11,11 +12,11 @@ class ImageHash
 {
     protected Implementation $implementation;
 
-    private ImageManager $driver;
+    private ImageManagerInterface $driver;
 
     public function __construct(
         ?Implementation $implementation = null,
-        ?ImageManager $driver = null
+        ?ImageManagerInterface $driver = null
     ) {
         $this->implementation = $implementation ?: $this->defaultImplementation();
         $this->driver = $driver ?: $this->defaultDriver();
@@ -28,7 +29,7 @@ class ImageHash
      */
     public function hash(mixed $image): Hash
     {
-        $image = $this->driver->read($image);
+        $image = $this->driver->decode($image);
 
         return $this->implementation->hash($image);
     }
@@ -52,9 +53,9 @@ class ImageHash
         return $hash1->distance($hash2);
     }
 
-    protected function createResource(string $data): Image
+    protected function createResource(string $data): ImageInterface
     {
-        return $this->driver->read($data);
+        return $this->driver->decode($data);
     }
 
     protected function defaultImplementation(): Implementation
@@ -62,7 +63,7 @@ class ImageHash
         return new DifferenceHash();
     }
 
-    protected function defaultDriver(): ImageManager
+    protected function defaultDriver(): ImageManagerInterface
     {
         if (extension_loaded('imagick')) {
             return new ImageManager(new ImagickDriver());
